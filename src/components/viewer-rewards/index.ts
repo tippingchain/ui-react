@@ -1,0 +1,1 @@
+export { RewardPoolInterface } from './RewardPoolInterface';
