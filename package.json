@@ -1,6 +1,6 @@
 {
   "name": "@tippingchain/ui-react",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "type": "module",
   "description": "TippingChain UI v2.0 - React components for multi-chain tipping with USDC payouts",
   "main": "./dist/index.js",
@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@tippingchain/contracts-interface": "^1.2.0",
-    "@tippingchain/sdk": "^2.0.2",
+    "@tippingchain/sdk": "^2.0.6",
     "clsx": "^2.0.0",
     "lucide-react": "^0.263.1"
   },
