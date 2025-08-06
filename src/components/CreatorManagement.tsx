@@ -53,7 +53,8 @@ export const CreatorManagement: React.FC<CreatorManagementProps> = ({
     try {
       const creatorId = await sdkConfig.sdk.addCreator({
         creatorWallet: newCreatorWallet,
-        chainId: chainId
+        chainId: chainId,
+        tier: 1 // Default to tier 1 for new creators
       });
       
       alert(`✅ Creator added successfully with ID: ${creatorId}`);

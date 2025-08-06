@@ -1,7 +1,7 @@
 {
-  "name": "@tippingchain/ui",
+  "name": "@tippingchain/ui-react",
   "version": "2.0.0",
-  "type": "module",
+  "type": "commonjs",
   "description": "TippingChain UI v2.0 - React components for multi-chain tipping with USDC payouts",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -21,15 +21,14 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "./node_modules/.bin/tsc",
     "dev": "rollup -c -w",
     "test": "jest",
-    "lint": "eslint src/**/*.{ts,tsx}",
-    "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
-    "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run clean && npm run lint && npm run typecheck && npm run test && npm run build",
-    "clean": "rimraf dist",
-    "prepack": "npm run build"
+    "lint": "./node_modules/.bin/eslint src/**/*.{ts,tsx}",
+    "lint:fix": "./node_modules/.bin/eslint src/**/*.{ts,tsx} --fix",
+    "typecheck": "./node_modules/.bin/tsc --noEmit",
+    "prepublishOnly": "rm -rf dist && npm run typecheck && npm run build",
+    "clean": "rm -rf dist"
   },
   "files": [
     "dist",
@@ -54,27 +53,28 @@
     "thirdweb": "^5.0.0"
   },
   "dependencies": {
-    "@tippingchain/sdk": "^2.0.0",
-    "lucide-react": "^0.263.0",
-    "clsx": "^2.0.0"
+    "@tippingchain/contracts-interface": "^1.2.0",
+    "@tippingchain/sdk": "^2.0.1",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.263.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-typescript": "^11.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@types/jest": "^29.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
     "eslint-plugin-react": "^7.0.0",
     "eslint-plugin-react-hooks": "^4.0.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^29.0.0",
     "jest-environment-jsdom": "^29.0.0",
-    "identity-obj-proxy": "^3.0.0",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/jest-dom": "^6.0.0",
     "rimraf": "^5.0.0",
     "rollup": "^4.0.0",
     "rollup-plugin-dts": "^6.0.0",

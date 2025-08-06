@@ -4,7 +4,8 @@ import { ConnectButton, useActiveAccount, useSendTransaction, useActiveWalletCha
 import { Coins, ArrowRight, Target } from 'lucide-react';
 import { formatTokenAmount, getChainName, getNativeCurrency } from '../utils/helpers';
 import type { ApeChainTippingProps } from '../types';
-import type { Creator, TipResult, SUPPORTED_CHAINS, CONTRACT_CONSTANTS } from '@tippingchain/sdk';
+import type { Creator, TipResult } from '@tippingchain/sdk';
+import { SUPPORTED_CHAINS, CONTRACT_CONSTANTS } from '@tippingchain/sdk';
 
 export const ApeChainTippingInterface: React.FC<ApeChainTippingProps> = ({
   creatorId,
