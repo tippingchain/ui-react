@@ -1,6 +1,6 @@
 {
   "name": "@tippingchain/ui-react",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "type": "module",
   "description": "TippingChain UI v2.0 - React components for multi-chain tipping with USDC payouts",
   "main": "./dist/index.js",
@@ -20,13 +20,12 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "rollup -c -w",
+    "build": "node_modules/.bin/tsup",
+    "dev": "node_modules/.bin/tsup --watch",
     "test": "jest",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
-    "typecheck": "tsc --noEmit",
-    "prepublishOnly": "rm -rf dist && npm run typecheck && npm run build",
+    "prepublishonly": "npm run clean && npm run build",
     "clean": "rm -rf dist"
   },
   "files": [
@@ -51,6 +50,11 @@
     "react-dom": "^18.0.0",
     "thirdweb": "^5.0.0"
   },
+  "peerDependenciesMeta": {
+    "thirdweb": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "@tippingchain/contracts-interface": "^1.2.0",
     "@tippingchain/sdk": "^2.0.2",
@@ -58,9 +62,6 @@
     "lucide-react": "^0.263.1"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.0",
-    "@rollup/plugin-typescript": "^11.0.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.0.0",
@@ -78,7 +79,9 @@
     "rollup": "^4.0.0",
     "rollup-plugin-dts": "^6.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
+    "thirdweb": "^5.105.26",
     "ts-jest": "^29.0.0",
+    "tsup": "^8.5.0",
     "typescript": "^5.0.0"
   }
 }
