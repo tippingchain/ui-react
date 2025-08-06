@@ -1,6 +1,6 @@
 {
   "name": "@tippingchain/ui-react",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "type": "module",
   "description": "TippingChain UI v2.0 - React components for multi-chain tipping with USDC payouts",
   "main": "./dist/index.js",
@@ -25,7 +25,7 @@
     "test": "jest",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
-    "prepublishOnly": "npm run clean && npm run build",
+    "prepublishOnly": "rm -rf dist && ./node_modules/.bin/tsup",
     "clean": "rm -rf dist"
   },
   "files": [
