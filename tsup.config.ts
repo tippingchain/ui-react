@@ -7,9 +7,26 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ['react', 'react-dom', 'thirdweb', '@tippingchain/sdk', '@tippingchain/contracts-interface'],
+  external: [
+    'react', 
+    'react-dom', 
+    'thirdweb',
+    '@tippingchain/sdk', 
+    '@tippingchain/contracts-interface',
+    'ethers',
+    'http',
+    'https',
+    'zlib',
+    'crypto',
+    'net',
+    'tls',
+    'stream',
+    'fs',
+    'path'
+  ],
   treeshake: true,
   banner: {
     js: '"use client"',
   },
+  noExternal: ['clsx', 'lucide-react'],
 })

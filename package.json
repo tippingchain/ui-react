@@ -4,7 +4,7 @@
   "type": "module",
   "description": "TippingChain UI v2.0 - React components for multi-chain tipping with USDC payouts",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./src/index.ts",
   "author": "TippingChain Team",
   "license": "MIT",
   "repository": {
@@ -20,16 +20,17 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "node_modules/.bin/tsup",
-    "dev": "node_modules/.bin/tsup --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "test": "jest",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
-    "prepublishonly": "npm run clean && npm run build",
+    "prepublishOnly": "npm run clean && npm run build",
     "clean": "rm -rf dist"
   },
   "files": [
     "dist",
+    "src",
     "README.md",
     "LICENSE"
   ],
