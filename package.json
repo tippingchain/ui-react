@@ -1,11 +1,19 @@
 {
   "name": "@tippingchain/ui-react",
   "version": "2.0.0",
-  "type": "commonjs",
+  "type": "module",
   "description": "TippingChain UI v2.0 - React components for multi-chain tipping with USDC payouts",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
   "author": "TippingChain Team",
   "license": "MIT",
   "repository": {
@@ -56,7 +64,7 @@
     "@tippingchain/contracts-interface": "^1.2.0",
     "@tippingchain/sdk": "^2.0.1",
     "clsx": "^2.0.0",
-    "lucide-react": "^0.263.0"
+    "lucide-react": "^0.263.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.0",
