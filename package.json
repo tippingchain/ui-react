@@ -20,12 +20,12 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "./node_modules/.bin/tsc",
+    "build": "tsc",
     "dev": "rollup -c -w",
     "test": "jest",
-    "lint": "./node_modules/.bin/eslint src/**/*.{ts,tsx}",
-    "lint:fix": "./node_modules/.bin/eslint src/**/*.{ts,tsx} --fix",
-    "typecheck": "./node_modules/.bin/tsc --noEmit",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
+    "typecheck": "tsc --noEmit",
     "prepublishOnly": "rm -rf dist && npm run typecheck && npm run build",
     "clean": "rm -rf dist"
   },
