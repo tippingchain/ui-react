@@ -1,11 +1,15 @@
 'use strict';
 
-var react = require('react');
-var react$1 = require('thirdweb/react');
+var React10 = require('react');
+var react = require('thirdweb/react');
 var sdk = require('@tippingchain/sdk');
 var jsxRuntime = require('react/jsx-runtime');
 var ethers = require('ethers');
 var contractsInterface = require('@tippingchain/contracts-interface');
+
+function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
+
+var React10__default = /*#__PURE__*/_interopDefault(React10);
 
 // node_modules/lucide-react/dist/esm/defaultAttributes.mjs
 var defaultAttributes = {
@@ -23,8 +27,8 @@ var defaultAttributes = {
 // node_modules/lucide-react/dist/esm/createLucideIcon.mjs
 var toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 var createLucideIcon = (iconName, iconNode) => {
-  const Component = react.forwardRef(
-    ({ color = "currentColor", size = 24, strokeWidth = 2, absoluteStrokeWidth, children, ...rest }, ref) => react.createElement(
+  const Component = React10.forwardRef(
+    ({ color = "currentColor", size = 24, strokeWidth = 2, absoluteStrokeWidth, children, ...rest }, ref) => React10.createElement(
       "svg",
       {
         ref,
@@ -37,7 +41,7 @@ var createLucideIcon = (iconName, iconNode) => {
         ...rest
       },
       [
-        ...iconNode.map(([tag, attrs]) => react.createElement(tag, attrs)),
+        ...iconNode.map(([tag, attrs]) => React10.createElement(tag, attrs)),
         ...(Array.isArray(children) ? children : [children]) || []
       ]
     )
@@ -47,6 +51,11 @@ var createLucideIcon = (iconName, iconNode) => {
 };
 var createLucideIcon$1 = createLucideIcon;
 
+// node_modules/lucide-react/dist/esm/icons/activity.mjs
+var Activity = createLucideIcon$1("Activity", [
+  ["path", { d: "M22 12h-4l-3 9L9 3l-3 9H2", key: "d5dnw9" }]
+]);
+
 // node_modules/lucide-react/dist/esm/icons/alert-circle.mjs
 var AlertCircle = createLucideIcon$1("AlertCircle", [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
@@ -54,10 +63,22 @@ var AlertCircle = createLucideIcon$1("AlertCircle", [
   ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
 ]);
 
+// node_modules/lucide-react/dist/esm/icons/arrow-down-right.mjs
+var ArrowDownRight = createLucideIcon$1("ArrowDownRight", [
+  ["path", { d: "m7 7 10 10", key: "1fmybs" }],
+  ["path", { d: "M17 7v10H7", key: "6fjiku" }]
+]);
+
 // node_modules/lucide-react/dist/esm/icons/arrow-right.mjs
 var ArrowRight = createLucideIcon$1("ArrowRight", [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/arrow-up-right.mjs
+var ArrowUpRight = createLucideIcon$1("ArrowUpRight", [
+  ["path", { d: "M7 7h10v10", key: "1tivn9" }],
+  ["path", { d: "M7 17 17 7", key: "1vkiza" }]
 ]);
 
 // node_modules/lucide-react/dist/esm/icons/award.mjs
@@ -86,6 +107,28 @@ var CheckCircle2 = createLucideIcon$1("CheckCircle2", [
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ]);
 
+// node_modules/lucide-react/dist/esm/icons/check-circle.mjs
+var CheckCircle = createLucideIcon$1("CheckCircle", [
+  ["path", { d: "M22 11.08V12a10 10 0 1 1-5.93-9.14", key: "g774vq" }],
+  ["polyline", { points: "22 4 12 14.01 9 11.01", key: "6xbx8j" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/chevron-down.mjs
+var ChevronDown = createLucideIcon$1("ChevronDown", [
+  ["path", { d: "m6 9 6 6 6-6", key: "qrunsl" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/chevron-right.mjs
+var ChevronRight = createLucideIcon$1("ChevronRight", [
+  ["path", { d: "m9 18 6-6-6-6", key: "mthhwq" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/clock.mjs
+var Clock = createLucideIcon$1("Clock", [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["polyline", { points: "12 6 12 12 16 14", key: "68esgv" }]
+]);
+
 // node_modules/lucide-react/dist/esm/icons/coins.mjs
 var Coins = createLucideIcon$1("Coins", [
   ["circle", { cx: "8", cy: "8", r: "6", key: "3yglwk" }],
@@ -94,12 +137,88 @@ var Coins = createLucideIcon$1("Coins", [
   ["path", { d: "m16.71 13.88.7.71-2.82 2.82", key: "1rbuyh" }]
 ]);
 
+// node_modules/lucide-react/dist/esm/icons/copy.mjs
+var Copy = createLucideIcon$1("Copy", [
+  [
+    "rect",
+    {
+      width: "14",
+      height: "14",
+      x: "8",
+      y: "8",
+      rx: "2",
+      ry: "2",
+      key: "17jyea"
+    }
+  ],
+  [
+    "path",
+    {
+      d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2",
+      key: "zix9uf"
+    }
+  ]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/dollar-sign.mjs
+var DollarSign = createLucideIcon$1("DollarSign", [
+  ["line", { x1: "12", x2: "12", y1: "2", y2: "22", key: "7eqyqh" }],
+  [
+    "path",
+    { d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6", key: "1b0p4s" }
+  ]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/download.mjs
+var Download = createLucideIcon$1("Download", [
+  ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ["polyline", { points: "7 10 12 15 17 10", key: "2ggqvy" }],
+  ["line", { x1: "12", x2: "12", y1: "15", y2: "3", key: "1vk2je" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/external-link.mjs
+var ExternalLink = createLucideIcon$1("ExternalLink", [
+  [
+    "path",
+    {
+      d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
+      key: "a6xqqp"
+    }
+  ],
+  ["polyline", { points: "15 3 21 3 21 9", key: "mznyad" }],
+  ["line", { x1: "10", x2: "21", y1: "14", y2: "3", key: "18c3s4" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/eye.mjs
+var Eye = createLucideIcon$1("Eye", [
+  [
+    "path",
+    { d: "M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z", key: "rwhkz3" }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/filter.mjs
+var Filter = createLucideIcon$1("Filter", [
+  [
+    "polygon",
+    { points: "22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3", key: "1yg77f" }
+  ]
+]);
+
 // node_modules/lucide-react/dist/esm/icons/hash.mjs
 var Hash = createLucideIcon$1("Hash", [
   ["line", { x1: "4", x2: "20", y1: "9", y2: "9", key: "4lhtct" }],
   ["line", { x1: "4", x2: "20", y1: "15", y2: "15", key: "vyu0kd" }],
   ["line", { x1: "10", x2: "8", y1: "3", y2: "21", key: "1ggp8o" }],
   ["line", { x1: "16", x2: "14", y1: "3", y2: "21", key: "weycgp" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/info.mjs
+var Info = createLucideIcon$1("Info", [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M12 16v-4", key: "1dtifu" }],
+  ["path", { d: "M12 8h.01", key: "e9boi3" }]
 ]);
 
 // node_modules/lucide-react/dist/esm/icons/loader-2.mjs
@@ -114,6 +233,12 @@ var PenLine = createLucideIcon$1("PenLine", [
     "path",
     { d: "M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z", key: "ymcmye" }
   ]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/pie-chart.mjs
+var PieChart = createLucideIcon$1("PieChart", [
+  ["path", { d: "M21.21 15.89A10 10 0 1 1 8 2.83", key: "k2fpak" }],
+  ["path", { d: "M22 12A10 10 0 0 0 12 2v10z", key: "1rfc4y" }]
 ]);
 
 // node_modules/lucide-react/dist/esm/icons/plus.mjs
@@ -148,6 +273,17 @@ var Send = createLucideIcon$1("Send", [
   ["path", { d: "M22 2 11 13", key: "nzbqef" }]
 ]);
 
+// node_modules/lucide-react/dist/esm/icons/star.mjs
+var Star = createLucideIcon$1("Star", [
+  [
+    "polygon",
+    {
+      points: "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2",
+      key: "8f66p6"
+    }
+  ]
+]);
+
 // node_modules/lucide-react/dist/esm/icons/target.mjs
 var Target = createLucideIcon$1("Target", [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
@@ -168,6 +304,28 @@ var Trash2 = createLucideIcon$1("Trash2", [
 var TrendingUp = createLucideIcon$1("TrendingUp", [
   ["polyline", { points: "22 7 13.5 15.5 8.5 10.5 2 17", key: "126l90" }],
   ["polyline", { points: "16 7 22 7 22 13", key: "kwv8wd" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/trophy.mjs
+var Trophy = createLucideIcon$1("Trophy", [
+  ["path", { d: "M6 9H4.5a2.5 2.5 0 0 1 0-5H6", key: "17hqa7" }],
+  ["path", { d: "M18 9h1.5a2.5 2.5 0 0 0 0-5H18", key: "lmptdp" }],
+  ["path", { d: "M4 22h16", key: "57wxv0" }],
+  [
+    "path",
+    {
+      d: "M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22",
+      key: "1nw9bq"
+    }
+  ],
+  [
+    "path",
+    {
+      d: "M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22",
+      key: "1np0yb"
+    }
+  ],
+  ["path", { d: "M18 2H6v7a6 6 0 0 0 12 0V2Z", key: "u46fv3" }]
 ]);
 
 // node_modules/lucide-react/dist/esm/icons/user-plus.mjs
@@ -197,6 +355,27 @@ var Wallet = createLucideIcon$1("Wallet", [
   ["path", { d: "M21 12V7H5a2 2 0 0 1 0-4h14v4", key: "195gfw" }],
   ["path", { d: "M3 5v14a2 2 0 0 0 2 2h16v-5", key: "195n9w" }],
   ["path", { d: "M18 12a2 2 0 0 0 0 4h4v-4Z", key: "vllfpd" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/x-circle.mjs
+var XCircle = createLucideIcon$1("XCircle", [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "m15 9-6 6", key: "1uzhvr" }],
+  ["path", { d: "m9 9 6 6", key: "z0biqf" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/x.mjs
+var X = createLucideIcon$1("X", [
+  ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
+  ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
+]);
+
+// node_modules/lucide-react/dist/esm/icons/zap.mjs
+var Zap = createLucideIcon$1("Zap", [
+  [
+    "polygon",
+    { points: "13 2 3 14 12 14 11 22 21 10 12 10 13 2", key: "45s27k" }
+  ]
 ]);
 
 // src/utils/helpers.ts
@@ -387,16 +566,16 @@ var ApeChainTippingInterface = ({
   onTipSuccess,
   onTipError
 }) => {
-  const account = react$1.useActiveAccount();
-  const activeChain = react$1.useActiveWalletChain();
-  const { isPending } = react$1.useSendTransaction();
-  const [amount, setAmount] = react.useState("");
-  const [selectedToken, setSelectedToken] = react.useState("native");
-  const [relayQuote, setRelayQuote] = react.useState(null);
-  const [isLoadingQuote, setIsLoadingQuote] = react.useState(false);
-  const [creator, setCreator] = react.useState(null);
-  const [isLoadingCreator, setIsLoadingCreator] = react.useState(true);
-  react.useEffect(() => {
+  const account = react.useActiveAccount();
+  const activeChain = react.useActiveWalletChain();
+  const { isPending } = react.useSendTransaction();
+  const [amount, setAmount] = React10.useState("");
+  const [selectedToken, setSelectedToken] = React10.useState("native");
+  const [relayQuote, setRelayQuote] = React10.useState(null);
+  const [isLoadingQuote, setIsLoadingQuote] = React10.useState(false);
+  const [creator, setCreator] = React10.useState(null);
+  const [isLoadingCreator, setIsLoadingCreator] = React10.useState(true);
+  React10.useEffect(() => {
     const loadCreator = async () => {
       if (!activeChain) return;
       setIsLoadingCreator(true);
@@ -412,7 +591,7 @@ var ApeChainTippingInterface = ({
     };
     loadCreator();
   }, [creatorId, activeChain, sdkConfig.sdk, onTipError]);
-  react.useEffect(() => {
+  React10.useEffect(() => {
     if (!amount || !activeChain || !creator) return;
     const getQuote = async () => {
       setIsLoadingQuote(true);
@@ -530,7 +709,7 @@ var ApeChainTippingInterface = ({
         ] })
       ] })
     ] }) }),
-    /* @__PURE__ */ jsxRuntime.jsx(react$1.ConnectButton, { client: sdkConfig.client, theme: "light" }),
+    /* @__PURE__ */ jsxRuntime.jsx(react.ConnectButton, { client: sdkConfig.client, theme: "light" }),
     account && activeChain && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mt-4 space-y-4", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bg-white rounded-lg p-3 border", children: [
         /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-sm text-gray-600", children: "Tipping from:" }),
@@ -627,12 +806,12 @@ var CreatorSelector = ({
   selectedCreatorId,
   className = ""
 }) => {
-  const [searchTerm, setSearchTerm] = react.useState("");
-  const [topCreators, setTopCreators] = react.useState([]);
-  const [searchResults, setSearchResults] = react.useState([]);
-  const [isLoadingTop, setIsLoadingTop] = react.useState(true);
-  const [isSearching, setIsSearching] = react.useState(false);
-  react.useEffect(() => {
+  const [searchTerm, setSearchTerm] = React10.useState("");
+  const [topCreators, setTopCreators] = React10.useState([]);
+  const [searchResults, setSearchResults] = React10.useState([]);
+  const [isLoadingTop, setIsLoadingTop] = React10.useState(true);
+  const [isSearching, setIsSearching] = React10.useState(false);
+  React10.useEffect(() => {
     const loadTopCreators = async () => {
       setIsLoadingTop(true);
       try {
@@ -646,7 +825,7 @@ var CreatorSelector = ({
     };
     loadTopCreators();
   }, [sdkConfig.sdk, chainId]);
-  react.useEffect(() => {
+  React10.useEffect(() => {
     if (!searchTerm.trim()) {
       setSearchResults([]);
       return;
@@ -767,15 +946,15 @@ var CreatorManagement = ({
   onCreatorAdded,
   className = ""
 }) => {
-  const [newCreatorWallet, setNewCreatorWallet] = react.useState("");
-  const [isAddingCreator, setIsAddingCreator] = react.useState(false);
-  const [platformStats, setPlatformStats] = react.useState(null);
-  const [isLoadingStats, setIsLoadingStats] = react.useState(true);
-  const [recentCreators, setRecentCreators] = react.useState([]);
-  const [editingCreatorId, setEditingCreatorId] = react.useState(null);
-  const [newWalletAddress, setNewWalletAddress] = react.useState("");
-  const [isUpdatingWallet, setIsUpdatingWallet] = react.useState(false);
-  react.useEffect(() => {
+  const [newCreatorWallet, setNewCreatorWallet] = React10.useState("");
+  const [isAddingCreator, setIsAddingCreator] = React10.useState(false);
+  const [platformStats, setPlatformStats] = React10.useState(null);
+  const [isLoadingStats, setIsLoadingStats] = React10.useState(true);
+  const [recentCreators, setRecentCreators] = React10.useState([]);
+  const [editingCreatorId, setEditingCreatorId] = React10.useState(null);
+  const [newWalletAddress, setNewWalletAddress] = React10.useState("");
+  const [isUpdatingWallet, setIsUpdatingWallet] = React10.useState(false);
+  React10.useEffect(() => {
     const loadData = async () => {
       setIsLoadingStats(true);
       try {
@@ -996,11 +1175,11 @@ var ViewerSelector = ({
   // Default to Polygon
   placeholder = "Search for viewer..."
 }) => {
-  const [searchType, setSearchType] = react.useState("id");
-  const [searchValue, setSearchValue] = react.useState("");
-  const [loading, setLoading] = react.useState(false);
-  const [error, setError] = react.useState("");
-  const [viewer, setViewer] = react.useState(null);
+  const [searchType, setSearchType] = React10.useState("id");
+  const [searchValue, setSearchValue] = React10.useState("");
+  const [loading, setLoading] = React10.useState(false);
+  const [error, setError] = React10.useState("");
+  const [viewer, setViewer] = React10.useState(null);
   const isDark = theme === "dark";
   const handleSearch = async () => {
     if (!searchValue.trim()) {
@@ -1178,21 +1357,21 @@ var ViewerRewardInterface = ({
   onRewardSent,
   theme = "light"
 }) => {
-  const account = react$1.useActiveAccount();
-  const activeChain = react$1.useActiveWalletChain();
-  const [selectedViewer, setSelectedViewer] = react.useState(null);
-  const [amount, setAmount] = react.useState("");
-  const [reason, setReason] = react.useState("");
-  const [loading, setLoading] = react.useState(false);
-  const [error, setError] = react.useState("");
-  const [success, setSuccess] = react.useState(false);
-  const [isCreator, setIsCreator] = react.useState(false);
-  const [rewardsEnabled, setRewardsEnabled] = react.useState(true);
-  const [lastResult, setLastResult] = react.useState(null);
-  const [showSelector, setShowSelector] = react.useState(true);
+  const account = react.useActiveAccount();
+  const activeChain = react.useActiveWalletChain();
+  const [selectedViewer, setSelectedViewer] = React10.useState(null);
+  const [amount, setAmount] = React10.useState("");
+  const [reason, setReason] = React10.useState("");
+  const [loading, setLoading] = React10.useState(false);
+  const [error, setError] = React10.useState("");
+  const [success, setSuccess] = React10.useState(false);
+  const [isCreator, setIsCreator] = React10.useState(false);
+  const [rewardsEnabled, setRewardsEnabled] = React10.useState(true);
+  const [lastResult, setLastResult] = React10.useState(null);
+  const [showSelector, setShowSelector] = React10.useState(true);
   const isDark = theme === "dark";
   const chainId = activeChain?.id || 137;
-  react.useEffect(() => {
+  React10.useEffect(() => {
     const checkCreatorStatus = async () => {
       if (!account?.address || !sdkConfig.sdk) return;
       try {
@@ -1437,20 +1616,20 @@ var BatchViewerReward = ({
   theme = "light",
   maxViewers = 50
 }) => {
-  const account = react$1.useActiveAccount();
-  const activeChain = react$1.useActiveWalletChain();
-  const [viewers, setViewers] = react.useState([
+  const account = react.useActiveAccount();
+  const activeChain = react.useActiveWalletChain();
+  const [viewers, setViewers] = React10.useState([
     { id: "1", address: "", amount: "", reason: "" }
   ]);
-  const [loading, setLoading] = react.useState(false);
-  const [error, setError] = react.useState("");
-  const [success, setSuccess] = react.useState(false);
-  const [isCreator, setIsCreator] = react.useState(false);
-  const [rewardsEnabled, setRewardsEnabled] = react.useState(true);
-  const [lastResult, setLastResult] = react.useState(null);
+  const [loading, setLoading] = React10.useState(false);
+  const [error, setError] = React10.useState("");
+  const [success, setSuccess] = React10.useState(false);
+  const [isCreator, setIsCreator] = React10.useState(false);
+  const [rewardsEnabled, setRewardsEnabled] = React10.useState(true);
+  const [lastResult, setLastResult] = React10.useState(null);
   const isDark = theme === "dark";
   const chainId = activeChain?.id || 137;
-  react.useEffect(() => {
+  React10.useEffect(() => {
     const checkCreatorStatus = async () => {
       if (!account?.address || !sdkConfig.sdk) return;
       try {
@@ -1735,15 +1914,15 @@ var ViewerRewardStats = ({
   autoRefresh = false,
   refreshInterval = 30
 }) => {
-  const account = react$1.useActiveAccount();
-  const activeChain = react$1.useActiveWalletChain();
-  const [stats, setStats] = react.useState({
+  const account = react.useActiveAccount();
+  const activeChain = react.useActiveWalletChain();
+  const [stats, setStats] = React10.useState({
     totalRewardsGiven: "0",
     totalRewardsReceived: "0",
     rewardCount: 0,
     loading: true
   });
-  const [isRefreshing, setIsRefreshing] = react.useState(false);
+  const [isRefreshing, setIsRefreshing] = React10.useState(false);
   const isDark = theme === "dark";
   const chainId = activeChain?.id || sdk.SUPPORTED_CHAINS.POLYGON;
   const targetAddress = address || account?.address;
@@ -1776,7 +1955,7 @@ var ViewerRewardStats = ({
       setIsRefreshing(false);
     }
   };
-  react.useEffect(() => {
+  React10.useEffect(() => {
     fetchStats();
     if (autoRefresh && refreshInterval > 0) {
       const interval = setInterval(fetchStats, refreshInterval * 1e3);
@@ -2007,20 +2186,20 @@ var RewardPoolInterface = ({
   onError,
   className = ""
 }) => {
-  const [totalAmount, setTotalAmount] = react.useState("");
-  const [viewerAddresses, setViewerAddresses] = react.useState("");
-  const [reason, setReason] = react.useState("");
-  const [chainId, setChainId] = react.useState();
-  const [isProcessing, setIsProcessing] = react.useState(false);
-  const [status, setStatus] = react.useState("idle");
-  const [result, setResult] = react.useState(null);
-  const [error, setError] = react.useState(null);
-  const [preview, setPreview] = react.useState(null);
-  const parseViewerAddresses = react.useCallback((input) => {
+  const [totalAmount, setTotalAmount] = React10.useState("");
+  const [viewerAddresses, setViewerAddresses] = React10.useState("");
+  const [reason, setReason] = React10.useState("");
+  const [chainId, setChainId] = React10.useState();
+  const [isProcessing, setIsProcessing] = React10.useState(false);
+  const [status, setStatus] = React10.useState("idle");
+  const [result, setResult] = React10.useState(null);
+  const [error, setError] = React10.useState(null);
+  const [preview, setPreview] = React10.useState(null);
+  const parseViewerAddresses = React10.useCallback((input) => {
     const addresses = input.split(/[,\n\s]+/).map((addr) => addr.trim()).filter((addr) => addr.length > 0 && addr.startsWith("0x"));
     return [...new Set(addresses)];
   }, []);
-  const handlePreview = react.useCallback(() => {
+  const handlePreview = React10.useCallback(() => {
     try {
       const addresses = parseViewerAddresses(viewerAddresses);
       if (addresses.length === 0) {
@@ -2040,7 +2219,7 @@ var RewardPoolInterface = ({
       setPreview(null);
     }
   }, [totalAmount, viewerAddresses, sdk]);
-  const handleCreatePool = react.useCallback(async () => {
+  const handleCreatePool = React10.useCallback(async () => {
     if (!totalAmount || !viewerAddresses) {
       setError(new Error("Please fill in all required fields"));
       return;
@@ -2248,8 +2427,1598 @@ var RewardPoolInterface = ({
   ] });
 };
 
+// src/utils/transactionHistoryService.ts
+var DEFAULT_STORAGE_KEY = "tippingchain_transaction_history";
+var MAX_HISTORY_ITEMS = 1e3;
+var LocalTransactionHistoryService = class {
+  constructor(storageKey = DEFAULT_STORAGE_KEY) {
+    this.storageKey = storageKey;
+  }
+  async getStoredTransactions() {
+    try {
+      const stored = localStorage.getItem(this.storageKey);
+      if (!stored) return [];
+      const parsed = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.error("Failed to load transaction history from localStorage:", error);
+      return [];
+    }
+  }
+  async saveTransactions(transactions) {
+    try {
+      const trimmed = transactions.slice(-MAX_HISTORY_ITEMS);
+      localStorage.setItem(this.storageKey, JSON.stringify(trimmed));
+    } catch (error) {
+      console.error("Failed to save transaction history to localStorage:", error);
+      throw error;
+    }
+  }
+  async getTransactions(filters) {
+    const transactions = await this.getStoredTransactions();
+    if (!filters) {
+      return transactions.sort((a, b) => b.timestamp - a.timestamp);
+    }
+    let filtered = transactions;
+    if (filters.type && filters.type !== "all") {
+      filtered = filtered.filter((tx) => tx.type === filters.type);
+    }
+    if (filters.status && filters.status !== "all") {
+      filtered = filtered.filter((tx) => tx.status === filters.status);
+    }
+    if (filters.chainId && filters.chainId !== "all") {
+      filtered = filtered.filter((tx) => tx.sourceChainId === filters.chainId);
+    }
+    if (filters.dateRange) {
+      filtered = filtered.filter(
+        (tx) => tx.timestamp >= filters.dateRange.start && tx.timestamp <= filters.dateRange.end
+      );
+    }
+    if (filters.tokenSymbol && filters.tokenSymbol !== "all") {
+      filtered = filtered.filter((tx) => tx.tokenSymbol === filters.tokenSymbol);
+    }
+    if (filters.creatorId) {
+      filtered = filtered.filter((tx) => tx.creatorId === filters.creatorId);
+    }
+    return filtered.sort((a, b) => b.timestamp - a.timestamp);
+  }
+  async addTransaction(transaction) {
+    const transactions = await this.getStoredTransactions();
+    const newTransaction = {
+      ...transaction,
+      id: `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      timestamp: Date.now()
+    };
+    transactions.push(newTransaction);
+    await this.saveTransactions(transactions);
+    return newTransaction.id;
+  }
+  async updateTransaction(id, updates) {
+    const transactions = await this.getStoredTransactions();
+    const index = transactions.findIndex((tx) => tx.id === id);
+    if (index === -1) {
+      throw new Error(`Transaction with id ${id} not found`);
+    }
+    transactions[index] = { ...transactions[index], ...updates };
+    await this.saveTransactions(transactions);
+  }
+  async clearHistory() {
+    localStorage.removeItem(this.storageKey);
+  }
+  async getStats(filters) {
+    const transactions = await this.getTransactions(filters);
+    const totalTransactions = transactions.length;
+    const successfulTransactions = transactions.filter((tx) => tx.status === "success").length;
+    const pendingTransactions = transactions.filter((tx) => tx.status === "pending").length;
+    const failedTransactions = transactions.filter((tx) => tx.status === "failed").length;
+    const totalVolumeUsd = transactions.reduce((sum, tx) => {
+      if (tx.status === "success" && tx.estimatedUsdValue) {
+        return sum + parseFloat(tx.estimatedUsdValue);
+      }
+      return sum;
+    }, 0);
+    const totalFeesUsd = transactions.reduce((sum, tx) => {
+      if (tx.status === "success" && tx.platformFeeUsd) {
+        return sum + parseFloat(tx.platformFeeUsd);
+      }
+      return sum;
+    }, 0);
+    const creatorIds = new Set(
+      transactions.filter((tx) => tx.type === "tip" && tx.status === "success" && tx.creatorId).map((tx) => tx.creatorId)
+    );
+    const chainCounts = {};
+    transactions.forEach((tx) => {
+      chainCounts[tx.sourceChainId] = (chainCounts[tx.sourceChainId] || 0) + 1;
+    });
+    const favoriteChainId = Object.entries(chainCounts).sort(([, a], [, b]) => b - a)[0];
+    const favoriteChain = favoriteChainId ? {
+      chainId: parseInt(favoriteChainId[0]),
+      transactionCount: favoriteChainId[1]
+    } : { chainId: 1, transactionCount: 0 };
+    const tokenStats = {};
+    transactions.forEach((tx) => {
+      if (tx.status === "success") {
+        if (!tokenStats[tx.tokenSymbol]) {
+          tokenStats[tx.tokenSymbol] = { count: 0, volume: 0 };
+        }
+        tokenStats[tx.tokenSymbol].count++;
+        if (tx.estimatedUsdValue) {
+          tokenStats[tx.tokenSymbol].volume += parseFloat(tx.estimatedUsdValue);
+        }
+      }
+    });
+    const favoriteTokenEntry = Object.entries(tokenStats).sort(([, a], [, b]) => b.count - a.count)[0];
+    const favoriteToken = favoriteTokenEntry ? {
+      symbol: favoriteTokenEntry[0],
+      transactionCount: favoriteTokenEntry[1].count,
+      volumeUsd: favoriteTokenEntry[1].volume.toFixed(2)
+    } : { symbol: "ETH", transactionCount: 0, volumeUsd: "0.00" };
+    return {
+      totalTransactions,
+      successfulTransactions,
+      pendingTransactions,
+      failedTransactions,
+      totalVolumeUsd: totalVolumeUsd.toFixed(2),
+      totalFeesUsd: totalFeesUsd.toFixed(2),
+      uniqueCreatorsTipped: creatorIds.size,
+      favoriteChain,
+      favoriteToken
+    };
+  }
+};
+var transactionBuilder = {
+  createTipTransaction: (params) => ({
+    type: "tip",
+    status: "pending",
+    sourceChainId: params.sourceChainId,
+    destinationChainId: 33139,
+    // ApeChain
+    tokenSymbol: params.tokenSymbol,
+    tokenAddress: params.tokenAddress,
+    amount: params.amount,
+    amountWei: params.amountWei,
+    estimatedUsdValue: params.estimatedUsdValue,
+    platformFee: params.platformFee,
+    creatorId: params.creatorId,
+    creatorWallet: params.creatorWallet,
+    title: `Tip to Creator #${params.creatorId}`,
+    description: `Sending ${params.amount} ${params.tokenSymbol} to Creator #${params.creatorId}`,
+    canRetry: true
+  }),
+  createApprovalTransaction: (params) => ({
+    type: "approval",
+    status: "pending",
+    sourceChainId: params.chainId,
+    tokenSymbol: params.tokenSymbol,
+    tokenAddress: params.tokenAddress,
+    amount: params.amount,
+    amountWei: params.amount,
+    // For approvals, amount is already in correct format
+    spenderAddress: params.spenderAddress,
+    title: `Approve ${params.tokenSymbol}`,
+    description: `Approving ${params.tokenSymbol} spending for TippingChain contract`,
+    canRetry: true
+  }),
+  createCreatorRegistrationTransaction: (params) => ({
+    type: "creator_registration",
+    status: "pending",
+    sourceChainId: params.chainId,
+    tokenSymbol: "ETH",
+    // Gas token
+    amount: "0",
+    amountWei: "0",
+    creatorWallet: params.creatorWallet,
+    membershipTier: params.membershipTier,
+    title: "Register New Creator",
+    description: `Registering creator ${params.creatorWallet.slice(0, 8)}... with Tier ${params.membershipTier}`,
+    canRetry: true
+  })
+};
+var createTransactionHistoryService = (storageKey) => {
+  return new LocalTransactionHistoryService(storageKey);
+};
+var CHAIN_EXPLORERS = {
+  1: { name: "Etherscan", baseUrl: "https://etherscan.io", txPath: "/tx/" },
+  137: { name: "PolygonScan", baseUrl: "https://polygonscan.com", txPath: "/tx/" },
+  10: { name: "Optimism Explorer", baseUrl: "https://optimistic.etherscan.io", txPath: "/tx/" },
+  56: { name: "BscScan", baseUrl: "https://bscscan.com", txPath: "/tx/" },
+  43114: { name: "SnowTrace", baseUrl: "https://snowtrace.io", txPath: "/tx/" },
+  8453: { name: "BaseScan", baseUrl: "https://basescan.org", txPath: "/tx/" },
+  42161: { name: "Arbiscan", baseUrl: "https://arbiscan.io", txPath: "/tx/" },
+  167e3: { name: "Taiko Explorer", baseUrl: "https://taikoscan.io", txPath: "/tx/" },
+  2741: { name: "Abstract Explorer", baseUrl: "https://explorer.abstract.xyz", txPath: "/tx/" },
+  33139: { name: "ApeChain Explorer", baseUrl: "https://apescan.io", txPath: "/tx/" }
+};
+var SUPPORTED_CHAINS4 = [
+  { id: 1, name: "Ethereum" },
+  { id: 137, name: "Polygon" },
+  { id: 10, name: "Optimism" },
+  { id: 56, name: "BSC" },
+  { id: 43114, name: "Avalanche" },
+  { id: 8453, name: "Base" },
+  { id: 42161, name: "Arbitrum" },
+  { id: 167e3, name: "Taiko" },
+  { id: 2741, name: "Abstract" },
+  { id: 33139, name: "ApeChain" }
+];
+var TransactionHistory = ({
+  className = "",
+  maxHeight = "max-h-96",
+  showStats = true,
+  showFilters = true,
+  walletAddress,
+  storageService,
+  onTransactionClick,
+  getExplorerUrl,
+  maxItems = 100
+}) => {
+  const [transactions, setTransactions] = React10.useState([]);
+  const [stats, setStats] = React10.useState(null);
+  const [loading, setLoading] = React10.useState(false);
+  const [expandedTx, setExpandedTx] = React10.useState(null);
+  const [filters, setFilters] = React10.useState({});
+  const [showFilterPanel, setShowFilterPanel] = React10.useState(false);
+  const historyService = storageService || createTransactionHistoryService();
+  const loadTransactions = async () => {
+    setLoading(true);
+    try {
+      const [txList, statsData] = await Promise.all([
+        historyService.getTransactions(filters),
+        showStats ? historyService.getStats(filters) : null
+      ]);
+      const limitedTxList = txList.slice(0, maxItems);
+      setTransactions(limitedTxList);
+      if (statsData) setStats(statsData);
+    } catch (error) {
+      console.error("Failed to load transaction history:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  React10.useEffect(() => {
+    loadTransactions();
+  }, [filters]);
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "pending":
+        return /* @__PURE__ */ jsxRuntime.jsx(Clock, { className: "w-4 h-4 text-yellow-500 animate-spin" });
+      case "success":
+        return /* @__PURE__ */ jsxRuntime.jsx(CheckCircle, { className: "w-4 h-4 text-green-500" });
+      case "failed":
+        return /* @__PURE__ */ jsxRuntime.jsx(XCircle, { className: "w-4 h-4 text-red-500" });
+      case "cancelled":
+        return /* @__PURE__ */ jsxRuntime.jsx(AlertCircle, { className: "w-4 h-4 text-gray-500" });
+      default:
+        return /* @__PURE__ */ jsxRuntime.jsx(AlertCircle, { className: "w-4 h-4 text-gray-500" });
+    }
+  };
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "success":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "failed":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "cancelled":
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+  const getTypeIcon = (type) => {
+    switch (type) {
+      case "tip":
+        return "\u{1F4B0}";
+      case "approval":
+        return "\u2705";
+      case "creator_registration":
+        return "\u{1F464}";
+      case "viewer_reward":
+        return "\u{1F381}";
+      default:
+        return "\u{1F4C4}";
+    }
+  };
+  const getChainName2 = (chainId) => {
+    const chain = SUPPORTED_CHAINS4.find((c) => c.id === chainId);
+    return chain ? chain.name : `Chain ${chainId}`;
+  };
+  const getExplorerLink = (chainId, txHash) => {
+    if (getExplorerUrl) {
+      return getExplorerUrl(chainId, txHash);
+    }
+    const explorer = CHAIN_EXPLORERS[chainId];
+    if (!explorer) return null;
+    return `${explorer.baseUrl}${explorer.txPath}${txHash}`;
+  };
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const now = /* @__PURE__ */ new Date();
+    const diff = now.getTime() - timestamp;
+    if (diff < 6e4) return "Just now";
+    if (diff < 36e5) return `${Math.floor(diff / 6e4)}m ago`;
+    if (diff < 864e5) return `${Math.floor(diff / 36e5)}h ago`;
+    if (diff < 6048e5) return `${Math.floor(diff / 864e5)}d ago`;
+    return date.toLocaleDateString();
+  };
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error("Failed to copy to clipboard:", err);
+    });
+  };
+  const handleTransactionClick = (tx) => {
+    if (onTransactionClick) {
+      onTransactionClick(tx);
+    } else {
+      setExpandedTx(expandedTx === tx.id ? null : tx.id);
+    }
+  };
+  const clearAllHistory = async () => {
+    if (confirm("Are you sure you want to clear all transaction history? This cannot be undone.")) {
+      await historyService.clearHistory();
+      loadTransactions();
+    }
+  };
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `bg-white rounded-xl shadow-lg ${className}`, children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between p-6 border-b border-gray-200", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-3", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Clock, { className: "w-6 h-6 text-blue-600" }),
+        /* @__PURE__ */ jsxRuntime.jsx("h2", { className: "text-xl font-semibold text-gray-900", children: "Transaction History" }),
+        transactions.length > 0 && /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full", children: [
+          transactions.length,
+          " transactions"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-2", children: [
+        showFilters && /* @__PURE__ */ jsxRuntime.jsxs(
+          "button",
+          {
+            onClick: () => setShowFilterPanel(!showFilterPanel),
+            className: `flex items-center px-3 py-2 text-sm rounded-md transition-colors ${showFilterPanel ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx(Filter, { className: "w-4 h-4 mr-2" }),
+              "Filters"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "button",
+          {
+            onClick: loadTransactions,
+            disabled: loading,
+            className: "flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 disabled:opacity-50",
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx(RefreshCw, { className: `w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}` }),
+              "Refresh"
+            ]
+          }
+        ),
+        transactions.length > 0 && /* @__PURE__ */ jsxRuntime.jsxs(
+          "button",
+          {
+            onClick: clearAllHistory,
+            className: "flex items-center px-3 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700",
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx(Trash2, { className: "w-4 h-4 mr-2" }),
+              "Clear"
+            ]
+          }
+        )
+      ] })
+    ] }),
+    showStats && stats && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "p-6 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-center justify-center mb-2", children: /* @__PURE__ */ jsxRuntime.jsx(TrendingUp, { className: "w-5 h-5 text-green-600" }) }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-2xl font-bold text-gray-900", children: [
+          "$",
+          stats.totalVolumeUsd
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-sm text-gray-600", children: "Total Volume" })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-center justify-center mb-2", children: /* @__PURE__ */ jsxRuntime.jsx(CheckCircle, { className: "w-5 h-5 text-green-600" }) }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-2xl font-bold text-gray-900", children: stats.successfulTransactions }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-sm text-gray-600", children: "Successful" })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-center justify-center mb-2", children: /* @__PURE__ */ jsxRuntime.jsx(Users, { className: "w-5 h-5 text-blue-600" }) }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-2xl font-bold text-gray-900", children: stats.uniqueCreatorsTipped }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-sm text-gray-600", children: "Creators Tipped" })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-center justify-center mb-2", children: /* @__PURE__ */ jsxRuntime.jsx(Coins, { className: "w-5 h-5 text-purple-600" }) }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-2xl font-bold text-gray-900", children: [
+          "$",
+          stats.totalFeesUsd
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-sm text-gray-600", children: "Total Fees" })
+      ] })
+    ] }) }),
+    showFilters && showFilterPanel && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "p-6 bg-gray-50 border-b border-gray-200", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntime.jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Transaction Type" }),
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "select",
+          {
+            value: filters.type || "all",
+            onChange: (e) => setFilters({ ...filters, type: e.target.value }),
+            className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500",
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "all", children: "All Types" }),
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "tip", children: "Tips" }),
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "approval", children: "Approvals" }),
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "creator_registration", children: "Creator Registration" }),
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "viewer_reward", children: "Viewer Rewards" })
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntime.jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Status" }),
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "select",
+          {
+            value: filters.status || "all",
+            onChange: (e) => setFilters({ ...filters, status: e.target.value }),
+            className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500",
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "all", children: "All Status" }),
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "pending", children: "Pending" }),
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "success", children: "Success" }),
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "failed", children: "Failed" }),
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "cancelled", children: "Cancelled" })
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntime.jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Chain" }),
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "select",
+          {
+            value: filters.chainId || "all",
+            onChange: (e) => setFilters({ ...filters, chainId: e.target.value === "all" ? "all" : parseInt(e.target.value) }),
+            className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500",
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx("option", { value: "all", children: "All Chains" }),
+              SUPPORTED_CHAINS4.map((chain) => /* @__PURE__ */ jsxRuntime.jsx("option", { value: chain.id, children: chain.name }, chain.id))
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-end", children: /* @__PURE__ */ jsxRuntime.jsx(
+        "button",
+        {
+          onClick: () => setFilters({}),
+          className: "w-full px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors",
+          children: "Clear Filters"
+        }
+      ) })
+    ] }) }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${maxHeight} overflow-y-auto`, children: loading ? /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-center py-12", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(RefreshCw, { className: "w-8 h-8 animate-spin text-blue-600 mr-3" }),
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-gray-600", children: "Loading transaction history..." })
+    ] }) : transactions.length === 0 ? /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-center py-12", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(Clock, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }),
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-gray-500 text-lg", children: "No transactions found" }),
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-sm text-gray-400 mt-2", children: Object.keys(filters).length > 0 ? "Try adjusting your filters" : "Your transactions will appear here once you start using TippingChain" })
+    ] }) : /* @__PURE__ */ jsxRuntime.jsx("div", { className: "divide-y divide-gray-200", children: transactions.map((tx) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "p-4 hover:bg-gray-50 transition-colors", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-4 flex-1", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-2xl", children: getTypeIcon(tx.type) }),
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex-1 min-w-0", children: [
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-3", children: [
+              /* @__PURE__ */ jsxRuntime.jsx("h3", { className: "font-medium text-gray-900 truncate", children: tx.title }),
+              /* @__PURE__ */ jsxRuntime.jsxs("span", { className: `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(tx.status)}`, children: [
+                getStatusIcon(tx.status),
+                /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ml-1.5 capitalize", children: tx.status })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-4 mt-1 text-sm text-gray-600", children: [
+              /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
+                tx.amount,
+                " ",
+                tx.tokenSymbol
+              ] }),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u2022" }),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: getChainName2(tx.sourceChainId) }),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u2022" }),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: formatTimestamp(tx.timestamp) }),
+              tx.estimatedUsdValue && /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+                /* @__PURE__ */ jsxRuntime.jsx("span", { children: "\u2022" }),
+                /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-green-600 font-medium", children: [
+                  "$",
+                  parseFloat(tx.estimatedUsdValue).toFixed(2)
+                ] })
+              ] })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ jsxRuntime.jsx(
+          "button",
+          {
+            onClick: () => handleTransactionClick(tx),
+            className: "p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors",
+            children: expandedTx === tx.id ? /* @__PURE__ */ jsxRuntime.jsx(ChevronDown, { className: "w-4 h-4" }) : /* @__PURE__ */ jsxRuntime.jsx(ChevronRight, { className: "w-4 h-4" })
+          }
+        ) })
+      ] }),
+      expandedTx === tx.id && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "mt-4 pt-4 border-t border-gray-200", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 text-sm", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "space-y-3", children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium text-gray-700", children: "Description:" }),
+            /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-gray-600 mt-1", children: tx.description })
+          ] }),
+          tx.creatorId && /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium text-gray-700", children: "Creator:" }),
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-blue-600 ml-2", children: [
+              "#",
+              tx.creatorId
+            ] }),
+            tx.creatorWallet && /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-gray-500 ml-2", children: [
+              "(",
+              tx.creatorWallet.slice(0, 8),
+              "...)"
+            ] })
+          ] }),
+          tx.error && /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium text-red-700", children: "Error:" }),
+            /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-red-600 mt-1 text-xs", children: tx.error })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "space-y-3", children: [
+          tx.sourceTransactionHash && /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium text-gray-700", children: "Transaction Hash:" }),
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center mt-1", children: [
+              /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-gray-600 font-mono text-xs", children: [
+                tx.sourceTransactionHash.slice(0, 10),
+                "...",
+                tx.sourceTransactionHash.slice(-8)
+              ] }),
+              /* @__PURE__ */ jsxRuntime.jsx(
+                "button",
+                {
+                  onClick: () => copyToClipboard(tx.sourceTransactionHash),
+                  className: "ml-2 p-1 text-gray-400 hover:text-gray-600",
+                  title: "Copy hash",
+                  children: /* @__PURE__ */ jsxRuntime.jsx(Copy, { className: "w-3 h-3" })
+                }
+              ),
+              getExplorerLink(tx.sourceChainId, tx.sourceTransactionHash) && /* @__PURE__ */ jsxRuntime.jsx(
+                "a",
+                {
+                  href: getExplorerLink(tx.sourceChainId, tx.sourceTransactionHash),
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  className: "ml-2 p-1 text-blue-600 hover:text-blue-800",
+                  title: "View on explorer",
+                  children: /* @__PURE__ */ jsxRuntime.jsx(ExternalLink, { className: "w-3 h-3" })
+                }
+              )
+            ] })
+          ] }),
+          tx.platformFee && /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium text-gray-700", children: "Platform Fee:" }),
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-gray-600 ml-2", children: [
+              tx.platformFee,
+              " ",
+              tx.tokenSymbol
+            ] }),
+            tx.platformFeeUsd && /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-gray-500 ml-1", children: [
+              "($",
+              tx.platformFeeUsd,
+              ")"
+            ] })
+          ] })
+        ] })
+      ] }) })
+    ] }, tx.id)) }) })
+  ] });
+};
+var MetricCard = ({
+  title,
+  value,
+  subtitle,
+  icon,
+  trend,
+  trendValue,
+  colorScheme = "blue",
+  loading = false
+}) => {
+  const colorClasses = {
+    blue: "border-l-blue-500 bg-blue-50",
+    green: "border-l-green-500 bg-green-50",
+    purple: "border-l-purple-500 bg-purple-50",
+    orange: "border-l-orange-500 bg-orange-50",
+    red: "border-l-red-500 bg-red-50",
+    yellow: "border-l-yellow-500 bg-yellow-50"
+  };
+  const iconColors = {
+    blue: "text-blue-600",
+    green: "text-green-600",
+    purple: "text-purple-600",
+    orange: "text-orange-600",
+    red: "text-red-600",
+    yellow: "text-yellow-600"
+  };
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `bg-white rounded-xl shadow-lg p-6 border-l-4 ${colorClasses[colorScheme]}`, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between", children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-sm font-medium text-gray-600", children: title }),
+      loading ? /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center mt-2", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Loader2, { className: "w-6 h-6 animate-spin text-gray-400" }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "ml-2 text-gray-400", children: "Loading..." })
+      ] }) : /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-2xl font-bold text-gray-900", children: value }),
+        subtitle && /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-sm text-gray-500", children: subtitle }),
+        trend && trendValue && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `flex items-center mt-1 text-sm ${trend === "up" ? "text-green-600" : trend === "down" ? "text-red-600" : "text-gray-600"}`, children: [
+          trend === "up" ? /* @__PURE__ */ jsxRuntime.jsx(ArrowUpRight, { className: "w-4 h-4 mr-1" }) : trend === "down" ? /* @__PURE__ */ jsxRuntime.jsx(ArrowDownRight, { className: "w-4 h-4 mr-1" }) : /* @__PURE__ */ jsxRuntime.jsx(Activity, { className: "w-4 h-4 mr-1" }),
+          trendValue
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: `w-8 h-8 ${iconColors[colorScheme]}`, children: icon })
+  ] }) });
+};
+var CreatorAnalyticsDashboard = ({
+  creators = [],
+  platformStats,
+  chainId,
+  chainName,
+  loading = false,
+  error = null,
+  onRefresh,
+  onCreatorSelect,
+  onExportData,
+  className = "",
+  showPlatformStats = true,
+  showCreatorRankings = true,
+  showTrendAnalysis = true,
+  showViewerRewards = true,
+  maxCreatorsShown = 20
+}) => {
+  const [timeRange, setTimeRange] = React10.useState("7d");
+  const [selectedTier, setSelectedTier] = React10.useState("all");
+  const [sortBy, setSortBy] = React10.useState("tips");
+  const [lastRefresh, setLastRefresh] = React10.useState(null);
+  React10.useEffect(() => {
+    if (!loading && creators.length > 0) {
+      setLastRefresh(/* @__PURE__ */ new Date());
+    }
+  }, [loading, creators.length]);
+  const formatAmount = React10.useCallback((amount) => {
+    try {
+      const eth = parseFloat(amount.toString()) / 1e18;
+      return eth.toLocaleString(void 0, {
+        maximumFractionDigits: 4,
+        minimumFractionDigits: 0
+      });
+    } catch {
+      return "0";
+    }
+  }, []);
+  const formatCurrency = React10.useCallback((amount) => {
+    try {
+      const eth = parseFloat(amount.toString()) / 1e18;
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(eth * 2e3);
+    } catch {
+      return "$0.00";
+    }
+  }, []);
+  const filteredCreators = creators.filter((creator) => {
+    if (selectedTier !== "all" && creator.tier !== selectedTier) return false;
+    return true;
+  }).sort((a, b) => {
+    switch (sortBy) {
+      case "tips":
+        return parseFloat(b.totalTips) - parseFloat(a.totalTips);
+      case "count":
+        return b.tipCount - a.tipCount;
+      case "average":
+        const avgA = a.tipCount > 0 ? parseFloat(a.totalTips) / a.tipCount : 0;
+        const avgB = b.tipCount > 0 ? parseFloat(b.totalTips) / b.tipCount : 0;
+        return avgB - avgA;
+      case "recent":
+        return (b.lastTipTimestamp || 0) - (a.lastTipTimestamp || 0);
+      default:
+        return 0;
+    }
+  }).slice(0, maxCreatorsShown);
+  const analytics = React10__default.default.useMemo(() => {
+    if (creators.length === 0) return null;
+    const totalTips = creators.reduce((sum, c) => sum + parseFloat(c.totalTips), 0);
+    const totalCount = creators.reduce((sum, c) => sum + c.tipCount, 0);
+    const activeCreators = creators.filter((c) => c.active).length;
+    const avgTipAmount = totalCount > 0 ? totalTips / totalCount : 0;
+    const tierDistribution = creators.reduce((acc, c) => {
+      acc[c.tier] = (acc[c.tier] || 0) + 1;
+      return acc;
+    }, {});
+    const topPerformers = creators.sort((a, b) => parseFloat(b.totalTips) - parseFloat(a.totalTips)).slice(0, 5);
+    return {
+      totalTips: totalTips.toString(),
+      totalCount,
+      activeCreators,
+      avgTipAmount: avgTipAmount.toString(),
+      tierDistribution,
+      topPerformers,
+      inactiveCreators: creators.length - activeCreators
+    };
+  }, [creators]);
+  const handleRefresh = React10.useCallback(() => {
+    if (onRefresh) {
+      onRefresh();
+    }
+  }, [onRefresh]);
+  const handleExport = React10.useCallback(() => {
+    if (onExportData) {
+      onExportData();
+    } else {
+      const dataToExport = {
+        chainId,
+        chainName,
+        exportDate: (/* @__PURE__ */ new Date()).toISOString(),
+        creators: filteredCreators,
+        platformStats,
+        analytics
+      };
+      const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `creator-analytics-${chainName}-${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }, [chainId, chainName, filteredCreators, platformStats, analytics, onExportData]);
+  if (error) {
+    return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `bg-white rounded-xl shadow-lg p-8 ${className}`, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-center", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(AlertCircle, { className: "w-12 h-12 text-red-500 mx-auto mb-4" }),
+      /* @__PURE__ */ jsxRuntime.jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2", children: "Analytics Error" }),
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-gray-600 mb-4", children: error }),
+      onRefresh && /* @__PURE__ */ jsxRuntime.jsxs(
+        "button",
+        {
+          onClick: handleRefresh,
+          className: "inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors",
+          children: [
+            /* @__PURE__ */ jsxRuntime.jsx(Refresh, { className: "w-4 h-4 mr-2" }),
+            "Retry"
+          ]
+        }
+      )
+    ] }) });
+  }
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `space-y-8 ${className}`, children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bg-white rounded-xl shadow-lg p-6", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between mb-4", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntime.jsxs("h2", { className: "text-2xl font-bold text-gray-900 flex items-center", children: [
+            /* @__PURE__ */ jsxRuntime.jsx(BarChart3, { className: "w-8 h-8 mr-3 text-blue-600" }),
+            "Creator Analytics Dashboard"
+          ] }),
+          /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "text-gray-600", children: [
+            chainName,
+            " \u2022 ",
+            creators.length,
+            " creators"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-3", children: [
+          onExportData && /* @__PURE__ */ jsxRuntime.jsxs(
+            "button",
+            {
+              onClick: handleExport,
+              className: "inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors",
+              children: [
+                /* @__PURE__ */ jsxRuntime.jsx(Download, { className: "w-4 h-4 mr-2" }),
+                "Export"
+              ]
+            }
+          ),
+          onRefresh && /* @__PURE__ */ jsxRuntime.jsxs(
+            "button",
+            {
+              onClick: handleRefresh,
+              disabled: loading,
+              className: "inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors",
+              children: [
+                loading ? /* @__PURE__ */ jsxRuntime.jsx(Loader2, { className: "w-4 h-4 mr-2 animate-spin" }) : /* @__PURE__ */ jsxRuntime.jsx(RefreshCw, { className: "w-4 h-4 mr-2" }),
+                "Refresh"
+              ]
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-4 gap-4", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntime.jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Time Range" }),
+          /* @__PURE__ */ jsxRuntime.jsxs(
+            "select",
+            {
+              value: timeRange,
+              onChange: (e) => setTimeRange(e.target.value),
+              className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+              children: [
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "24h", children: "Last 24 Hours" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "7d", children: "Last 7 Days" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "30d", children: "Last 30 Days" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "all", children: "All Time" })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntime.jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Tier Filter" }),
+          /* @__PURE__ */ jsxRuntime.jsxs(
+            "select",
+            {
+              value: selectedTier,
+              onChange: (e) => setSelectedTier(e.target.value === "all" ? "all" : Number(e.target.value)),
+              className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+              children: [
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "all", children: "All Tiers" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: 1, children: "Tier 1" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: 2, children: "Tier 2" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: 3, children: "Tier 3" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: 4, children: "Tier 4" })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntime.jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Sort By" }),
+          /* @__PURE__ */ jsxRuntime.jsxs(
+            "select",
+            {
+              value: sortBy,
+              onChange: (e) => setSortBy(e.target.value),
+              className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+              children: [
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "tips", children: "Total Tips" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "count", children: "Tip Count" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "average", children: "Average Tip" }),
+                /* @__PURE__ */ jsxRuntime.jsx("option", { value: "recent", children: "Most Recent" })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-end", children: lastRefresh && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-sm text-gray-500", children: [
+          /* @__PURE__ */ jsxRuntime.jsx(Clock, { className: "w-4 h-4 inline mr-1" }),
+          "Updated: ",
+          lastRefresh.toLocaleTimeString()
+        ] }) })
+      ] })
+    ] }),
+    showPlatformStats && platformStats && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "grid md:grid-cols-2 lg:grid-cols-4 gap-6", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Total Platform Tips",
+          value: `${formatAmount(platformStats.totalTips)} ETH`,
+          subtitle: formatCurrency(platformStats.totalTips),
+          icon: /* @__PURE__ */ jsxRuntime.jsx(DollarSign, { className: "w-8 h-8" }),
+          colorScheme: "blue",
+          loading
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Active Creators",
+          value: platformStats.activeCreators,
+          subtitle: `${creators.length - platformStats.activeCreators} inactive`,
+          icon: /* @__PURE__ */ jsxRuntime.jsx(Users, { className: "w-8 h-8" }),
+          colorScheme: "green",
+          loading
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Total Transactions",
+          value: platformStats.totalCount.toLocaleString(),
+          subtitle: "All time",
+          icon: /* @__PURE__ */ jsxRuntime.jsx(Activity, { className: "w-8 h-8" }),
+          colorScheme: "purple",
+          loading
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Relayed to ApeChain",
+          value: `${formatAmount(platformStats.totalRelayed)} USDC`,
+          subtitle: platformStats.autoRelayEnabled ? "Auto-relay enabled" : "Manual relay",
+          icon: /* @__PURE__ */ jsxRuntime.jsx(Zap, { className: "w-8 h-8" }),
+          colorScheme: "orange",
+          loading
+        }
+      )
+    ] }),
+    analytics && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "grid md:grid-cols-3 lg:grid-cols-5 gap-6", children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Average Tip Amount",
+          value: `${formatAmount(analytics.avgTipAmount)} ETH`,
+          subtitle: "Per transaction",
+          icon: /* @__PURE__ */ jsxRuntime.jsx(Target, { className: "w-8 h-8" }),
+          colorScheme: "blue",
+          loading
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Creator Activity Rate",
+          value: `${Math.round(analytics.activeCreators / creators.length * 100)}%`,
+          subtitle: `${analytics.activeCreators}/${creators.length} active`,
+          icon: /* @__PURE__ */ jsxRuntime.jsx(CheckCircle, { className: "w-8 h-8" }),
+          colorScheme: "green",
+          loading
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Top Tier Distribution",
+          value: `Tier ${Object.entries(analytics.tierDistribution).reduce((a, b) => analytics.tierDistribution[parseInt(a[0])] > analytics.tierDistribution[parseInt(b[0])] ? a : b)[0]}`,
+          subtitle: `${Object.entries(analytics.tierDistribution).reduce((a, b) => analytics.tierDistribution[parseInt(a[0])] > analytics.tierDistribution[parseInt(b[0])] ? a : b)[1]} creators`,
+          icon: /* @__PURE__ */ jsxRuntime.jsx(Award, { className: "w-8 h-8" }),
+          colorScheme: "purple",
+          loading
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Platform Efficiency",
+          value: `${platformStats?.autoRelayEnabled ? 95 : 75}%`,
+          subtitle: platformStats?.autoRelayEnabled ? "Auto-relay active" : "Manual processing",
+          icon: /* @__PURE__ */ jsxRuntime.jsx(TrendingUp, { className: "w-8 h-8" }),
+          colorScheme: "orange",
+          loading
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx(
+        MetricCard,
+        {
+          title: "Growth Potential",
+          value: `${analytics.inactiveCreators}`,
+          subtitle: "Inactive creators",
+          icon: /* @__PURE__ */ jsxRuntime.jsx(Eye, { className: "w-8 h-8" }),
+          colorScheme: "yellow",
+          loading
+        }
+      )
+    ] }),
+    showCreatorRankings && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bg-white rounded-xl shadow-lg p-6", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between mb-6", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("h3", { className: "text-xl font-semibold text-gray-900 flex items-center", children: [
+          /* @__PURE__ */ jsxRuntime.jsx(Trophy, { className: "w-6 h-6 mr-2 text-yellow-600" }),
+          "Creator Leaderboard",
+          /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "ml-2 text-sm text-gray-500", children: [
+            "(",
+            filteredCreators.length,
+            " shown)"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-2", children: [
+          /* @__PURE__ */ jsxRuntime.jsx(Filter, { className: "w-4 h-4 text-gray-400" }),
+          /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-sm text-gray-500", children: [
+            "Filtered by: ",
+            selectedTier === "all" ? "All Tiers" : `Tier ${selectedTier}`
+          ] })
+        ] })
+      ] }),
+      loading ? /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-center py-12", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Loader2, { className: "w-8 h-8 animate-spin text-blue-600 mr-3" }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-gray-600", children: "Loading creator rankings..." })
+      ] }) : filteredCreators.length === 0 ? /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-center py-12 text-gray-500", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Users, { className: "w-12 h-12 mx-auto mb-4 text-gray-400" }),
+        /* @__PURE__ */ jsxRuntime.jsx("p", { children: "No creators found matching the current filters" })
+      ] }) : /* @__PURE__ */ jsxRuntime.jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxRuntime.jsxs("table", { className: "w-full", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("thead", { children: /* @__PURE__ */ jsxRuntime.jsxs("tr", { className: "border-b border-gray-200", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("th", { className: "text-left py-3 px-4 font-medium text-gray-600", children: "Rank" }),
+          /* @__PURE__ */ jsxRuntime.jsx("th", { className: "text-left py-3 px-4 font-medium text-gray-600", children: "Creator" }),
+          /* @__PURE__ */ jsxRuntime.jsx("th", { className: "text-left py-3 px-4 font-medium text-gray-600", children: "Tier" }),
+          /* @__PURE__ */ jsxRuntime.jsx("th", { className: "text-left py-3 px-4 font-medium text-gray-600", children: "Total Tips" }),
+          /* @__PURE__ */ jsxRuntime.jsx("th", { className: "text-left py-3 px-4 font-medium text-gray-600", children: "Transactions" }),
+          /* @__PURE__ */ jsxRuntime.jsx("th", { className: "text-left py-3 px-4 font-medium text-gray-600", children: "Average Tip" }),
+          /* @__PURE__ */ jsxRuntime.jsx("th", { className: "text-left py-3 px-4 font-medium text-gray-600", children: "Status" }),
+          /* @__PURE__ */ jsxRuntime.jsx("th", { className: "text-left py-3 px-4 font-medium text-gray-600", children: "Performance" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntime.jsx("tbody", { children: filteredCreators.map((creator, index) => {
+          const avgTip = creator.tipCount > 0 ? parseFloat(creator.totalTips) / creator.tipCount : 0;
+          const isTopPerformer = index < 3;
+          return /* @__PURE__ */ jsxRuntime.jsxs(
+            "tr",
+            {
+              className: `border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${isTopPerformer ? "bg-gradient-to-r from-yellow-50 to-transparent" : ""}`,
+              onClick: () => onCreatorSelect?.(creator.id),
+              children: [
+                /* @__PURE__ */ jsxRuntime.jsx("td", { className: "py-3 px-4", children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-center", children: index < 3 ? /* @__PURE__ */ jsxRuntime.jsx("div", { className: `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${index === 0 ? "bg-yellow-100 text-yellow-800" : index === 1 ? "bg-gray-100 text-gray-800" : "bg-orange-100 text-orange-800"}`, children: index === 0 ? "\u{1F947}" : index === 1 ? "\u{1F948}" : "\u{1F949}" }) : /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-gray-500 w-8 text-center", children: [
+                  "#",
+                  index + 1
+                ] }) }) }),
+                /* @__PURE__ */ jsxRuntime.jsx("td", { className: "py-3 px-4", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "font-mono text-blue-600 font-semibold", children: [
+                    "#",
+                    creator.id
+                  ] }),
+                  /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "text-xs font-mono text-gray-500 mt-1", children: [
+                    creator.wallet.slice(0, 6),
+                    "...",
+                    creator.wallet.slice(-4)
+                  ] })
+                ] }) }),
+                /* @__PURE__ */ jsxRuntime.jsx("td", { className: "py-3 px-4", children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: `inline-flex px-2 py-1 rounded-full text-xs font-medium ${creator.tier === 1 ? "bg-gray-100 text-gray-800" : creator.tier === 2 ? "bg-blue-100 text-blue-800" : creator.tier === 3 ? "bg-purple-100 text-purple-800" : "bg-yellow-100 text-yellow-800"}`, children: [
+                  "Tier ",
+                  creator.tier
+                ] }) }),
+                /* @__PURE__ */ jsxRuntime.jsx("td", { className: "py-3 px-4", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "font-semibold", children: [
+                    formatAmount(creator.totalTips),
+                    " ETH"
+                  ] }),
+                  /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-xs text-gray-500", children: formatCurrency(creator.totalTips) })
+                ] }) }),
+                /* @__PURE__ */ jsxRuntime.jsx("td", { className: "py-3 px-4", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium", children: creator.tipCount.toLocaleString() }) }),
+                /* @__PURE__ */ jsxRuntime.jsx("td", { className: "py-3 px-4", children: /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "font-mono text-sm", children: [
+                  formatAmount(avgTip.toString()),
+                  " ETH"
+                ] }) }),
+                /* @__PURE__ */ jsxRuntime.jsx("td", { className: "py-3 px-4", children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: `inline-flex px-2 py-1 rounded-full text-xs font-medium ${creator.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`, children: creator.active ? "Active" : "Inactive" }) }),
+                /* @__PURE__ */ jsxRuntime.jsx("td", { className: "py-3 px-4", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-1", children: [
+                  creator.tipCount > 100 && /* @__PURE__ */ jsxRuntime.jsx(Star, { className: "w-4 h-4 text-yellow-500", title: "High Volume" }),
+                  avgTip > 0.1 && /* @__PURE__ */ jsxRuntime.jsx(Coins, { className: "w-4 h-4 text-blue-500", title: "High Value" }),
+                  isTopPerformer && /* @__PURE__ */ jsxRuntime.jsx(Trophy, { className: "w-4 h-4 text-orange-500", title: "Top Performer" })
+                ] }) })
+              ]
+            },
+            creator.id
+          );
+        }) })
+      ] }) })
+    ] }),
+    showTrendAnalysis && analytics && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bg-white rounded-xl shadow-lg p-6", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("h3", { className: "text-xl font-semibold text-gray-900 mb-6 flex items-center", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(PieChart, { className: "w-6 h-6 mr-2 text-purple-600" }),
+        "Creator Distribution Analysis"
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "grid md:grid-cols-3 gap-6", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "p-4 bg-gray-50 rounded-lg", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("h4", { className: "font-medium text-gray-700 mb-3", children: "Tier Distribution" }),
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: "space-y-2", children: Object.entries(analytics.tierDistribution).map(([tier, count]) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between", children: [
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-sm text-gray-600", children: [
+              "Tier ",
+              tier,
+              ":"
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center", children: [
+              /* @__PURE__ */ jsxRuntime.jsx("div", { className: "w-16 bg-gray-200 rounded-full h-2 mr-2", children: /* @__PURE__ */ jsxRuntime.jsx(
+                "div",
+                {
+                  className: "bg-blue-600 h-2 rounded-full",
+                  style: { width: `${count / creators.length * 100}%` }
+                }
+              ) }),
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-sm font-medium", children: count })
+            ] })
+          ] }, tier)) })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "p-4 bg-gray-50 rounded-lg", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("h4", { className: "font-medium text-gray-700 mb-3", children: "Activity Status" }),
+          /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "space-y-2", children: [
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-sm text-gray-600", children: "Active:" }),
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center", children: [
+                /* @__PURE__ */ jsxRuntime.jsx("div", { className: "w-16 bg-gray-200 rounded-full h-2 mr-2", children: /* @__PURE__ */ jsxRuntime.jsx(
+                  "div",
+                  {
+                    className: "bg-green-600 h-2 rounded-full",
+                    style: { width: `${analytics.activeCreators / creators.length * 100}%` }
+                  }
+                ) }),
+                /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-sm font-medium", children: analytics.activeCreators })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-sm text-gray-600", children: "Inactive:" }),
+              /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center", children: [
+                /* @__PURE__ */ jsxRuntime.jsx("div", { className: "w-16 bg-gray-200 rounded-full h-2 mr-2", children: /* @__PURE__ */ jsxRuntime.jsx(
+                  "div",
+                  {
+                    className: "bg-red-600 h-2 rounded-full",
+                    style: { width: `${analytics.inactiveCreators / creators.length * 100}%` }
+                  }
+                ) }),
+                /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-sm font-medium", children: analytics.inactiveCreators })
+              ] })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "p-4 bg-gray-50 rounded-lg", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("h4", { className: "font-medium text-gray-700 mb-3", children: "Top Performers" }),
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: "space-y-1", children: analytics.topPerformers.slice(0, 3).map((creator, index) => /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between text-sm", children: [
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-gray-600", children: [
+              "#",
+              creator.id,
+              ":"
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "font-medium", children: [
+              formatAmount(creator.totalTips),
+              " ETH"
+            ] })
+          ] }, creator.id)) })
+        ] })
+      ] })
+    ] }),
+    showViewerRewards && creators.some((c) => c.viewerRewardsSent) && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bg-white rounded-xl shadow-lg p-6", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("h3", { className: "text-xl font-semibold text-gray-900 mb-6 flex items-center", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(Gift, { className: "w-6 h-6 mr-2 text-green-600" }),
+        "Viewer Rewards Activity"
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "grid md:grid-cols-3 gap-6", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(
+          MetricCard,
+          {
+            title: "Total Viewer Rewards Sent",
+            value: `${formatAmount(creators.reduce((sum, c) => sum + parseFloat(c.viewerRewardsSent || "0"), 0).toString())} ETH`,
+            subtitle: "By all creators",
+            icon: /* @__PURE__ */ jsxRuntime.jsx(Gift, { className: "w-8 h-8" }),
+            colorScheme: "green"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsx(
+          MetricCard,
+          {
+            title: "Active Reward Senders",
+            value: creators.filter((c) => c.viewerRewardsSent && parseFloat(c.viewerRewardsSent) > 0).length,
+            subtitle: "Creators sending rewards",
+            icon: /* @__PURE__ */ jsxRuntime.jsx(Users, { className: "w-8 h-8" }),
+            colorScheme: "blue"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsx(
+          MetricCard,
+          {
+            title: "Total Reward Transactions",
+            value: creators.reduce((sum, c) => sum + (c.viewerRewardCount || 0), 0),
+            subtitle: "Individual reward sends",
+            icon: /* @__PURE__ */ jsxRuntime.jsx(Activity, { className: "w-8 h-8" }),
+            colorScheme: "purple"
+          }
+        )
+      ] })
+    ] })
+  ] });
+};
+var CHAIN_EXPLORERS2 = {
+  1: { name: "Etherscan", baseUrl: "https://etherscan.io", txPath: "/tx/" },
+  137: { name: "PolygonScan", baseUrl: "https://polygonscan.com", txPath: "/tx/" },
+  10: { name: "Optimism Explorer", baseUrl: "https://optimistic.etherscan.io", txPath: "/tx/" },
+  56: { name: "BscScan", baseUrl: "https://bscscan.com", txPath: "/tx/" },
+  43114: { name: "SnowTrace", baseUrl: "https://snowtrace.io", txPath: "/tx/" },
+  8453: { name: "BaseScan", baseUrl: "https://basescan.org", txPath: "/tx/" },
+  42161: { name: "Arbiscan", baseUrl: "https://arbiscan.io", txPath: "/tx/" },
+  167e3: { name: "Taiko Explorer", baseUrl: "https://taikoscan.io", txPath: "/tx/" },
+  2741: { name: "Abstract Explorer", baseUrl: "https://explorer.abstract.xyz", txPath: "/tx/" },
+  33139: { name: "ApeChain Explorer", baseUrl: "https://apescan.io", txPath: "/tx/" },
+  // Testnets
+  17e3: { name: "Holesky Etherscan", baseUrl: "https://holesky.etherscan.io", txPath: "/tx/" },
+  80002: { name: "Amoy PolygonScan", baseUrl: "https://amoy.polygonscan.com", txPath: "/tx/" },
+  33111: { name: "Curtis ApeChain", baseUrl: "https://curtis.explorer.caldera.xyz", txPath: "/tx/" }
+};
+var NotificationToast = ({
+  notification,
+  onRemove,
+  position = "top-right",
+  getExplorerUrl
+}) => {
+  const [isVisible, setIsVisible] = React10.useState(false);
+  const [isLeaving, setIsLeaving] = React10.useState(false);
+  React10.useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
+  const handleRemove = () => {
+    setIsLeaving(true);
+    setTimeout(() => onRemove(notification.id), 300);
+  };
+  const getIcon = () => {
+    const iconClass = "w-5 h-5 flex-shrink-0";
+    switch (notification.type) {
+      case "success":
+        return /* @__PURE__ */ jsxRuntime.jsx(CheckCircle, { className: `${iconClass} text-green-500` });
+      case "error":
+        return /* @__PURE__ */ jsxRuntime.jsx(XCircle, { className: `${iconClass} text-red-500` });
+      case "warning":
+        return /* @__PURE__ */ jsxRuntime.jsx(AlertCircle, { className: `${iconClass} text-yellow-500` });
+      case "info":
+        return /* @__PURE__ */ jsxRuntime.jsx(Info, { className: `${iconClass} text-blue-500` });
+      case "pending":
+        return /* @__PURE__ */ jsxRuntime.jsx(Clock, { className: `${iconClass} text-blue-500 animate-spin` });
+      default:
+        return /* @__PURE__ */ jsxRuntime.jsx(Info, { className: `${iconClass} text-gray-500` });
+    }
+  };
+  const getBackgroundColor = () => {
+    switch (notification.type) {
+      case "success":
+        return "bg-green-50 border-green-200";
+      case "error":
+        return "bg-red-50 border-red-200";
+      case "warning":
+        return "bg-yellow-50 border-yellow-200";
+      case "info":
+        return "bg-blue-50 border-blue-200";
+      case "pending":
+        return "bg-blue-50 border-blue-200";
+      default:
+        return "bg-gray-50 border-gray-200";
+    }
+  };
+  const getTextColor = () => {
+    switch (notification.type) {
+      case "success":
+        return "text-green-800";
+      case "error":
+        return "text-red-800";
+      case "warning":
+        return "text-yellow-800";
+      case "info":
+        return "text-blue-800";
+      case "pending":
+        return "text-blue-800";
+      default:
+        return "text-gray-800";
+    }
+  };
+  const getExplorerLink = (chainId, txHash) => {
+    if (getExplorerUrl) {
+      return getExplorerUrl(chainId, txHash);
+    }
+    const explorer = CHAIN_EXPLORERS2[chainId];
+    if (!explorer) return null;
+    return `${explorer.baseUrl}${explorer.txPath}${txHash}`;
+  };
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error("Failed to copy to clipboard:", err);
+    });
+  };
+  const getAnimationClasses = () => {
+    const isRightSide = position.includes("right");
+    const isLeftSide = position.includes("left");
+    if (isLeaving) {
+      return isRightSide ? "transform translate-x-full opacity-0" : isLeftSide ? "transform -translate-x-full opacity-0" : "transform scale-95 opacity-0";
+    }
+    if (!isVisible) {
+      return isRightSide ? "transform translate-x-full opacity-0" : isLeftSide ? "transform -translate-x-full opacity-0" : "transform scale-95 opacity-0";
+    }
+    return "transform translate-x-0 scale-100 opacity-100";
+  };
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    "div",
+    {
+      className: `
+        max-w-sm w-full shadow-lg rounded-lg border transition-all duration-300 ease-in-out
+        ${getBackgroundColor()} ${getAnimationClasses()}
+      `,
+      style: { pointerEvents: "auto" },
+      children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "p-4", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-start", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex-shrink-0", children: getIcon() }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "ml-3 flex-1", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: `text-sm font-medium ${getTextColor()}`, children: notification.title }),
+          notification.message && /* @__PURE__ */ jsxRuntime.jsx("div", { className: `mt-1 text-sm ${getTextColor()} opacity-90`, children: notification.message }),
+          notification.transactionHash && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mt-2 flex items-center space-x-2", children: [
+            /* @__PURE__ */ jsxRuntime.jsxs("span", { className: `text-xs ${getTextColor()} opacity-75 font-mono`, children: [
+              notification.transactionHash.slice(0, 10),
+              "...",
+              notification.transactionHash.slice(-8)
+            ] }),
+            /* @__PURE__ */ jsxRuntime.jsx(
+              "button",
+              {
+                onClick: () => copyToClipboard(notification.transactionHash),
+                className: `p-1 hover:bg-white hover:bg-opacity-50 rounded transition-colors ${getTextColor()} opacity-60 hover:opacity-90`,
+                title: "Copy transaction hash",
+                children: /* @__PURE__ */ jsxRuntime.jsx(Copy, { className: "w-3 h-3" })
+              }
+            ),
+            notification.chainId && getExplorerLink(notification.chainId, notification.transactionHash) && /* @__PURE__ */ jsxRuntime.jsx(
+              "a",
+              {
+                href: getExplorerLink(notification.chainId, notification.transactionHash),
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: `p-1 hover:bg-white hover:bg-opacity-50 rounded transition-colors ${getTextColor()} opacity-60 hover:opacity-90`,
+                title: "View on explorer",
+                children: /* @__PURE__ */ jsxRuntime.jsx(ExternalLink, { className: "w-3 h-3" })
+              }
+            )
+          ] }),
+          notification.actions && notification.actions.length > 0 && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "mt-3 flex space-x-2", children: notification.actions.map((action, index) => /* @__PURE__ */ jsxRuntime.jsx(
+            "button",
+            {
+              onClick: action.action,
+              className: `
+                      px-3 py-1 text-xs rounded-md font-medium transition-colors
+                      ${notification.type === "success" ? "bg-green-200 hover:bg-green-300 text-green-800" : notification.type === "error" ? "bg-red-200 hover:bg-red-300 text-red-800" : notification.type === "warning" ? "bg-yellow-200 hover:bg-yellow-300 text-yellow-800" : "bg-blue-200 hover:bg-blue-300 text-blue-800"}
+                    `,
+              children: action.label
+            },
+            index
+          )) })
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex-shrink-0 ml-4", children: /* @__PURE__ */ jsxRuntime.jsx(
+          "button",
+          {
+            onClick: handleRemove,
+            className: `
+                rounded-md p-1.5 inline-flex transition-colors
+                hover:bg-white hover:bg-opacity-50 focus:outline-none focus:ring-2 focus:ring-offset-2
+                ${getTextColor()} opacity-60 hover:opacity-90
+                ${notification.type === "success" && "focus:ring-green-500"}
+                ${notification.type === "error" && "focus:ring-red-500"}
+                ${notification.type === "warning" && "focus:ring-yellow-500"}
+                ${(notification.type === "info" || notification.type === "pending") && "focus:ring-blue-500"}
+              `,
+            children: /* @__PURE__ */ jsxRuntime.jsx(X, { className: "w-4 h-4" })
+          }
+        ) })
+      ] }) })
+    }
+  );
+};
+var NotificationContext = React10.createContext(null);
+var NotificationProvider = ({
+  children,
+  maxNotifications = 5,
+  defaultPosition = "top-right",
+  className = ""
+}) => {
+  const [notifications, setNotifications] = React10.useState([]);
+  const timeoutRefs = React10.useRef(/* @__PURE__ */ new Map());
+  const clearTimeout2 = (id) => {
+    const timeout = timeoutRefs.current.get(id);
+    if (timeout) {
+      global.clearTimeout(timeout);
+      timeoutRefs.current.delete(id);
+    }
+  };
+  const addNotification = React10.useCallback((notification) => {
+    const id = `notification_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const newNotification = {
+      ...notification,
+      id
+    };
+    setNotifications((prev) => {
+      const updated = [newNotification, ...prev];
+      return updated.slice(0, maxNotifications);
+    });
+    if (notification.duration && notification.duration > 0) {
+      const timeout = setTimeout(() => {
+        removeNotification(id);
+      }, notification.duration);
+      timeoutRefs.current.set(id, timeout);
+    }
+    return id;
+  }, [maxNotifications]);
+  const removeNotification = React10.useCallback((id) => {
+    clearTimeout2(id);
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  }, []);
+  const clearNotifications = React10.useCallback(() => {
+    timeoutRefs.current.forEach((timeout) => global.clearTimeout(timeout));
+    timeoutRefs.current.clear();
+    setNotifications([]);
+  }, []);
+  const updateNotification = React10.useCallback((id, updates) => {
+    setNotifications(
+      (prev) => prev.map(
+        (notification) => notification.id === id ? { ...notification, ...updates } : notification
+      )
+    );
+    if (updates.duration !== void 0) {
+      clearTimeout2(id);
+      if (updates.duration > 0) {
+        const timeout = setTimeout(() => {
+          removeNotification(id);
+        }, updates.duration);
+        timeoutRefs.current.set(id, timeout);
+      }
+    }
+  }, [removeNotification]);
+  React10.useEffect(() => {
+    return () => {
+      timeoutRefs.current.forEach((timeout) => global.clearTimeout(timeout));
+      timeoutRefs.current.clear();
+    };
+  }, []);
+  const getPositionClasses = (position) => {
+    const baseClasses = "fixed z-50 pointer-events-none";
+    switch (position) {
+      case "top-right":
+        return `${baseClasses} top-4 right-4`;
+      case "top-left":
+        return `${baseClasses} top-4 left-4`;
+      case "bottom-right":
+        return `${baseClasses} bottom-4 right-4`;
+      case "bottom-left":
+        return `${baseClasses} bottom-4 left-4`;
+      case "top-center":
+        return `${baseClasses} top-4 left-1/2 transform -translate-x-1/2`;
+      case "bottom-center":
+        return `${baseClasses} bottom-4 left-1/2 transform -translate-x-1/2`;
+      default:
+        return `${baseClasses} top-4 right-4`;
+    }
+  };
+  const contextValue = {
+    notifications,
+    addNotification,
+    removeNotification,
+    clearNotifications,
+    updateNotification
+  };
+  return /* @__PURE__ */ jsxRuntime.jsxs(NotificationContext.Provider, { value: contextValue, children: [
+    children,
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: `${getPositionClasses(defaultPosition)} ${className}`, children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "space-y-3 pointer-events-auto", children: notifications.map((notification) => /* @__PURE__ */ jsxRuntime.jsx(
+      NotificationToast,
+      {
+        notification,
+        onRemove: removeNotification,
+        position: defaultPosition
+      },
+      notification.id
+    )) }) })
+  ] });
+};
+var useNotifications = () => {
+  const context = React10.useContext(NotificationContext);
+  if (!context) {
+    throw new Error("useNotifications must be used within a NotificationProvider");
+  }
+  return context;
+};
+
+// src/components/notifications/useTransactionNotifications.ts
+var useTransactionNotifications = () => {
+  const { addNotification, updateNotification } = useNotifications();
+  const notifyApprovalPending = async (options) => {
+    return addNotification({
+      type: "pending",
+      title: "Token Approval Pending",
+      message: `Approving ${options.tokenSymbol} spending...`,
+      transactionHash: options.transactionHash,
+      chainId: options.chainId,
+      duration: 0
+      // Keep until updated
+    });
+  };
+  const notifyApprovalSuccess = (tokenSymbol, transactionHash, chainId) => {
+    return addNotification({
+      type: "success",
+      title: "Token Approved Successfully! \u2705",
+      message: `${tokenSymbol} is now approved for spending`,
+      transactionHash,
+      chainId,
+      duration: 5e3
+    });
+  };
+  const notifyApprovalError = (tokenSymbol, error) => {
+    return addNotification({
+      type: "error",
+      title: "Token Approval Failed",
+      message: `Failed to approve ${tokenSymbol}: ${error}`,
+      duration: 8e3
+    });
+  };
+  const notifyTipPending = async (options) => {
+    return addNotification({
+      type: "pending",
+      title: "Tip Transaction Pending",
+      message: `Sending ${options.amount} ${options.tokenSymbol} to Creator #${options.creatorId}...`,
+      transactionHash: options.transactionHash,
+      chainId: options.chainId,
+      duration: 0
+      // Keep until updated
+    });
+  };
+  const notifyTipSuccess = (amount, tokenSymbol, creatorId, estimatedUsdc, transactionHash, chainId) => {
+    const message = estimatedUsdc ? `${amount} ${tokenSymbol} sent to Creator #${creatorId}. Estimated USDC: ~$${estimatedUsdc}` : `${amount} ${tokenSymbol} sent to Creator #${creatorId}`;
+    return addNotification({
+      type: "success",
+      title: "Tip Sent Successfully! \u{1F389}",
+      message,
+      transactionHash,
+      chainId,
+      duration: 8e3
+    });
+  };
+  const notifyTipError = (amount, tokenSymbol, creatorId, error) => {
+    return addNotification({
+      type: "error",
+      title: "Tip Transaction Failed",
+      message: `Failed to send ${amount} ${tokenSymbol} to Creator #${creatorId}: ${error}`,
+      duration: 1e4
+    });
+  };
+  const notifyCreatorAdded = async (creatorId, wallet, membershipTier, chainId, transactionHash) => {
+    return addNotification({
+      type: "success",
+      title: "Creator Added Successfully",
+      message: `Creator #${creatorId} (${wallet.slice(0, 8)}...) registered with Tier ${membershipTier}`,
+      transactionHash,
+      chainId,
+      duration: 6e3
+    });
+  };
+  const notifyCreatorError = (error) => {
+    return addNotification({
+      type: "error",
+      title: "Creator Registration Failed",
+      message: error,
+      duration: 8e3
+    });
+  };
+  const notifyBalanceRefresh = () => {
+    return addNotification({
+      type: "info",
+      title: "Balances Updated",
+      message: "Token balances have been refreshed",
+      duration: 3e3
+    });
+  };
+  const notifyNetworkSwitch = (networkName) => {
+    return addNotification({
+      type: "info",
+      title: "Network Switched",
+      message: `Connected to ${networkName}`,
+      duration: 4e3
+    });
+  };
+  const updateNotificationStatus = (notificationId, type, title, message, transactionHash) => {
+    updateNotification(notificationId, {
+      type,
+      title,
+      message,
+      transactionHash,
+      duration: type === "success" ? 6e3 : 8e3
+    });
+  };
+  return {
+    // Approval notifications
+    notifyApprovalPending,
+    notifyApprovalSuccess,
+    notifyApprovalError,
+    // Tip notifications
+    notifyTipPending,
+    notifyTipSuccess,
+    notifyTipError,
+    // Creator management notifications
+    notifyCreatorAdded,
+    notifyCreatorError,
+    // General notifications
+    notifyBalanceRefresh,
+    notifyNetworkSwitch,
+    // Update existing notifications
+    updateNotificationStatus
+  };
+};
+
 // src/index.ts
-var UI_VERSION = "2.0.0";
+var UI_VERSION = "2.1.0";
 var FEE_STRUCTURE = {
   PLATFORM_PERCENTAGE: 5,
   // Platform always takes 5% for tips
@@ -2262,10 +4031,15 @@ exports.ApeChainTippingInterface = ApeChainTippingInterface;
 exports.BatchViewerReward = BatchViewerReward;
 exports.Button = Button;
 exports.ChainSelector = ChainSelector;
+exports.CreatorAnalyticsDashboard = CreatorAnalyticsDashboard;
 exports.CreatorManagement = CreatorManagement;
 exports.CreatorSelector = CreatorSelector;
 exports.FEE_STRUCTURE = FEE_STRUCTURE;
+exports.LocalTransactionHistoryService = LocalTransactionHistoryService;
+exports.NotificationProvider = NotificationProvider;
+exports.NotificationToast = NotificationToast;
 exports.RewardPoolInterface = RewardPoolInterface;
+exports.TransactionHistory = TransactionHistory;
 exports.TransactionStatusMessage = TransactionStatusMessage;
 exports.UI_VERSION = UI_VERSION;
 exports.ViewerRewardInterface = ViewerRewardInterface;
@@ -2273,12 +4047,16 @@ exports.ViewerRewardStats = ViewerRewardStats;
 exports.ViewerSelector = ViewerSelector;
 exports.calculateFeeBreakdown = calculateFeeBreakdown;
 exports.calculateViewerRewardFees = calculateViewerRewardFees;
+exports.createTransactionHistoryService = createTransactionHistoryService;
 exports.debounce = debounce;
 exports.formatTokenAmount = formatTokenAmount;
 exports.getChainName = getChainName;
 exports.getNativeCurrency = getNativeCurrency;
 exports.getTokenOptions = getTokenOptions;
 exports.isValidAddress = isValidAddress;
+exports.transactionBuilder = transactionBuilder;
 exports.truncateAddress = truncateAddress;
+exports.useNotifications = useNotifications;
+exports.useTransactionNotifications = useTransactionNotifications;
 //# sourceMappingURL=index.cjs.map
 //# sourceMappingURL=index.cjs.map

@@ -10,6 +10,25 @@ export { ViewerRewardStats } from './components/ViewerRewardStats';
 export { ViewerSelector } from './components/ViewerSelector';
 export { RewardPoolInterface } from './components/viewer-rewards';
 
+// Transaction History component exports
+export { TransactionHistory } from './components/TransactionHistory';
+
+// Creator Analytics Dashboard component exports
+export { 
+  CreatorAnalyticsDashboard,
+  type CreatorAnalyticsData,
+  type PlatformAnalyticsData,
+  type CreatorAnalyticsDashboardProps
+} from './components/CreatorAnalyticsDashboard';
+
+// Notification system exports
+export { 
+  NotificationProvider, 
+  useNotifications, 
+  NotificationToast,
+  useTransactionNotifications 
+} from './components/notifications';
+
 // Type exports
 export type {
   ApeChainTippingProps,
@@ -21,6 +40,29 @@ export type {
   TokenOption,
   FeeBreakdown,
 } from './types';
+
+// Notification types
+export type {
+  Notification,
+  NotificationContextType,
+  NotificationProviderProps,
+  NotificationToastProps,
+  TransactionNotificationOptions,
+  NotificationHelpers,
+} from './types/notifications';
+
+// Transaction History types
+export type {
+  TransactionHistoryItem,
+  TransactionFilters,
+  TransactionStats,
+  TransactionHistoryStorage,
+  TransactionHistoryProps,
+  TransactionStatsProps,
+  TransactionFilterProps,
+  TransactionExportProps,
+  TransactionBuilder,
+} from './types/transactionHistory';
 
 // Utility exports
 export {
@@ -35,11 +77,18 @@ export {
   getTokenOptions,
 } from './utils/helpers';
 
+// Transaction History utilities
+export {
+  LocalTransactionHistoryService,
+  createTransactionHistoryService,
+  transactionBuilder,
+} from './utils/transactionHistoryService';
+
 // Common component exports
 export { ChainSelector, TransactionStatusMessage, Button } from './components/common';
 
-// Constants
-export const UI_VERSION = '2.0.0';
+// Constants  
+export const UI_VERSION = '2.2.0';
 
 // NOTE: Fee structure is now dynamic based on creator tiers
 // Use CONTRACT_CONSTANTS from @tippingchain/contracts-interface for current values
