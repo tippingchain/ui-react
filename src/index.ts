@@ -29,6 +29,31 @@ export {
   useTransactionNotifications 
 } from './components/notifications';
 
+// Real-time component exports
+export {
+  LiveBalanceDisplay,
+  MultiTokenBalanceDisplay,
+  RelayProgressIndicator,
+  RelayStatusBadge,
+  type LiveBalanceDisplayProps,
+  type MultiTokenBalanceDisplayProps,
+  type RelayProgressIndicatorProps,
+  type RelayStatusBadgeProps
+} from './components/realtime';
+
+// Real-time hook exports
+export {
+  useTransactionMonitor,
+  useBalanceWatcher,
+  useRelayProgress,
+  type TransactionMonitorState,
+  type UseTransactionMonitorOptions,
+  type BalanceWatcherState,
+  type UseBalanceWatcherOptions,
+  type RelayProgressState,
+  type UseRelayProgressOptions
+} from './hooks';
+
 // Type exports
 export type {
   ApeChainTippingProps,
@@ -88,7 +113,7 @@ export {
 export { ChainSelector, TransactionStatusMessage, Button } from './components/common';
 
 // Constants  
-export const UI_VERSION = '2.2.0';
+export const UI_VERSION = '2.3.0';
 
 // NOTE: Fee structure is now dynamic based on creator tiers
 // Use CONTRACT_CONSTANTS from @tippingchain/contracts-interface for current values

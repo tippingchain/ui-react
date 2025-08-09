@@ -300,6 +300,12 @@ var Trash2 = createLucideIcon$1("Trash2", [
   ["line", { x1: "14", x2: "14", y1: "11", y2: "17", key: "xtxkd" }]
 ]);
 
+// node_modules/lucide-react/dist/esm/icons/trending-down.mjs
+var TrendingDown = createLucideIcon$1("TrendingDown", [
+  ["polyline", { points: "22 17 13.5 8.5 8.5 13.5 2 7", key: "1r2t7k" }],
+  ["polyline", { points: "16 17 22 17 22 11", key: "11uiuu" }]
+]);
+
 // node_modules/lucide-react/dist/esm/icons/trending-up.mjs
 var TrendingUp = createLucideIcon$1("TrendingUp", [
   ["polyline", { points: "22 7 13.5 15.5 8.5 10.5 2 17", key: "126l90" }],
@@ -4016,9 +4022,1039 @@ var useTransactionNotifications = () => {
     updateNotificationStatus
   };
 };
+var useTransactionMonitor = (transactionHash, chainId, sdk, options = {}) => {
+  const {
+    enableNotifications = true,
+    autoStart = true,
+    onStatusChange,
+    onComplete,
+    onError
+  } = options;
+  const [state, setState] = React10.useState({
+    status: "pending",
+    receipt: null,
+    error: null,
+    isLoading: false,
+    progress: 0
+  });
+  const { updateNotification } = useNotifications();
+  const watchPromiseRef = React10.useRef(null);
+  const notificationIdRef = React10.useRef(null);
+  const getProgressFromStatus = React10.useCallback((status) => {
+    switch (status) {
+      case "pending":
+        return 25;
+      case "confirmed":
+        return 100;
+      case "failed":
+        return 0;
+      case "dropped":
+        return 0;
+      case "replaced":
+        return 50;
+      case "not_found":
+        return 0;
+      default:
+        return 0;
+    }
+  }, []);
+  const startMonitoring = React10.useCallback(async (txHash, chainId2, notificationId) => {
+    if (!sdk?.transactionStatus) {
+      console.error("SDK transaction status service not available");
+      return;
+    }
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
+    notificationIdRef.current = notificationId || null;
+    try {
+      const chain = sdk.getChainById(chainId2);
+      if (!chain) {
+        throw new Error(`Chain ${chainId2} not supported`);
+      }
+      watchPromiseRef.current = sdk.transactionStatus.watchTransactionWithCallback(
+        txHash,
+        chain,
+        (update) => {
+          const progress = getProgressFromStatus(update.status);
+          setState((prev) => ({
+            ...prev,
+            status: update.status,
+            receipt: update.receipt || null,
+            error: update.error || null,
+            progress
+          }));
+          if (enableNotifications && notificationIdRef.current) {
+            let title = "";
+            let message = "";
+            let type = "pending";
+            switch (update.status) {
+              case "confirmed":
+                type = "success";
+                title = "Transaction Confirmed! \u2705";
+                message = `Transaction completed successfully`;
+                break;
+              case "failed":
+                type = "error";
+                title = "Transaction Failed";
+                message = update.error || "Transaction failed";
+                break;
+              case "pending":
+                title = "Transaction Pending";
+                message = `Waiting for confirmation...`;
+                break;
+              default:
+                title = `Transaction ${update.status}`;
+                message = `Status: ${update.status}`;
+            }
+            updateNotification(notificationIdRef.current, {
+              type,
+              title,
+              message,
+              transactionHash: txHash,
+              chainId: chainId2,
+              duration: type === "success" || type === "error" ? 6e3 : 0
+            });
+          }
+          onStatusChange?.(update);
+          if (update.status === "confirmed" && update.receipt) {
+            onComplete?.(update.receipt);
+          } else if (update.status === "failed") {
+            onError?.(update.error || "Transaction failed");
+          }
+        }
+      );
+      const result = await watchPromiseRef.current;
+      setState((prev) => ({ ...prev, isLoading: false }));
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      setState((prev) => ({
+        ...prev,
+        error: errorMessage,
+        isLoading: false,
+        status: "failed"
+      }));
+      onError?.(errorMessage);
+    }
+  }, [sdk, enableNotifications, getProgressFromStatus, updateNotification, onStatusChange, onComplete, onError]);
+  const stopMonitoring = React10.useCallback(() => {
+    if (transactionHash && chainId && sdk?.transactionStatus) {
+      sdk.transactionStatus.cancelWatch(transactionHash, chainId);
+    }
+    watchPromiseRef.current = null;
+    setState((prev) => ({ ...prev, isLoading: false }));
+  }, [transactionHash, chainId, sdk]);
+  React10.useEffect(() => {
+    if (autoStart && transactionHash && chainId && sdk) {
+      startMonitoring(transactionHash, chainId);
+    }
+    return () => {
+      stopMonitoring();
+    };
+  }, [transactionHash, chainId, autoStart, sdk, startMonitoring, stopMonitoring]);
+  const monitor = React10.useCallback((txHash, chain, notificationId) => {
+    return startMonitoring(txHash, chain, notificationId);
+  }, [startMonitoring]);
+  const reset = React10.useCallback(() => {
+    setState({
+      status: "pending",
+      receipt: null,
+      error: null,
+      isLoading: false,
+      progress: 0
+    });
+    notificationIdRef.current = null;
+  }, []);
+  return {
+    // State
+    ...state,
+    // Control functions
+    monitor,
+    stopMonitoring,
+    reset,
+    // Status helpers
+    isPending: state.status === "pending",
+    isConfirmed: state.status === "confirmed",
+    isFailed: state.status === "failed",
+    isComplete: state.status === "confirmed" || state.status === "failed"
+  };
+};
+var useBalanceWatcher = (address, chainId, tokenAddress, sdk, options = {}) => {
+  const {
+    enableNotifications = false,
+    // Only notify on significant changes
+    autoStart = true,
+    pollInterval = 1e4,
+    onBalanceChange,
+    onError,
+    notifyOnIncrease = true,
+    notifyOnDecrease = false
+  } = options;
+  const [state, setState] = React10.useState({
+    balance: "0",
+    previousBalance: null,
+    isRefreshing: false,
+    lastUpdated: null,
+    error: null
+  });
+  const { addNotification } = useNotifications();
+  const watcherKeyRef = React10.useRef(null);
+  const isWatchingRef = React10.useRef(false);
+  const formatBalance = React10.useCallback((balance, decimals = 18) => {
+    try {
+      const balanceBigInt = BigInt(balance);
+      const divisor = BigInt(10 ** decimals);
+      const wholePart = balanceBigInt / divisor;
+      const fractionalPart = balanceBigInt % divisor;
+      if (fractionalPart === BigInt(0)) {
+        return wholePart.toString();
+      }
+      const fractionalStr = fractionalPart.toString().padStart(decimals, "0");
+      const trimmedFractional = fractionalStr.replace(/0+$/, "");
+      return `${wholePart}.${trimmedFractional}`;
+    } catch (error) {
+      console.error("Error formatting balance:", error);
+      return "0";
+    }
+  }, []);
+  const isSignificantChange = React10.useCallback((oldBalance, newBalance, threshold = 0.01) => {
+    try {
+      const oldBal = parseFloat(oldBalance);
+      const newBal = parseFloat(newBalance);
+      if (oldBal === 0) return newBal > 0;
+      const changePercent = Math.abs((newBal - oldBal) / oldBal);
+      return changePercent >= threshold;
+    } catch {
+      return oldBalance !== newBalance;
+    }
+  }, []);
+  const startWatching = React10.useCallback(async () => {
+    if (!address || chainId === null || !sdk?.balanceWatcher) {
+      console.warn("Missing required parameters for balance watching");
+      return;
+    }
+    if (isWatchingRef.current) {
+      console.warn("Already watching balance");
+      return;
+    }
+    setState((prev) => ({ ...prev, error: null }));
+    try {
+      const chain = sdk.getChainById(chainId);
+      if (!chain) {
+        throw new Error(`Chain ${chainId} not supported`);
+      }
+      isWatchingRef.current = true;
+      watcherKeyRef.current = sdk.balanceWatcher.watchBalance(
+        address,
+        chain,
+        tokenAddress,
+        (update) => {
+          const formattedBalance = formatBalance(update.balance);
+          const formattedPrevious = update.previousBalance ? formatBalance(update.previousBalance) : null;
+          setState((prev) => ({
+            ...prev,
+            balance: formattedBalance,
+            previousBalance: formattedPrevious,
+            lastUpdated: new Date(update.timestamp),
+            isRefreshing: false
+          }));
+          if (enableNotifications && update.previousBalance) {
+            const balanceIncreased = BigInt(update.balance) > BigInt(update.previousBalance);
+            const balanceDecreased = BigInt(update.balance) < BigInt(update.previousBalance);
+            const shouldNotify = balanceIncreased && notifyOnIncrease || balanceDecreased && notifyOnDecrease;
+            if (shouldNotify && isSignificantChange(update.previousBalance, update.balance)) {
+              const changeAmount = formatBalance(
+                (BigInt(update.balance) - BigInt(update.previousBalance)).toString()
+              );
+              const tokenSymbol = tokenAddress ? "Token" : "ETH";
+              const changeType = balanceIncreased ? "increased" : "decreased";
+              const emoji = balanceIncreased ? "\u{1F4C8}" : "\u{1F4C9}";
+              addNotification({
+                type: balanceIncreased ? "success" : "info",
+                title: `Balance ${changeType} ${emoji}`,
+                message: `${tokenSymbol} balance changed by ${changeAmount}`,
+                duration: 5e3
+              });
+            }
+          }
+          onBalanceChange?.(update);
+        },
+        { pollInterval }
+      );
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      setState((prev) => ({ ...prev, error: errorMessage }));
+      isWatchingRef.current = false;
+      onError?.(errorMessage);
+    }
+  }, [
+    address,
+    chainId,
+    tokenAddress,
+    sdk,
+    pollInterval,
+    enableNotifications,
+    notifyOnIncrease,
+    notifyOnDecrease,
+    formatBalance,
+    isSignificantChange,
+    addNotification,
+    onBalanceChange,
+    onError
+  ]);
+  const stopWatching = React10.useCallback(() => {
+    if (watcherKeyRef.current && sdk?.balanceWatcher) {
+      sdk.balanceWatcher.cancelBalanceWatch(watcherKeyRef.current);
+      watcherKeyRef.current = null;
+    }
+    isWatchingRef.current = false;
+    setState((prev) => ({ ...prev, isRefreshing: false }));
+  }, [sdk]);
+  const refreshBalance = React10.useCallback(async () => {
+    if (!address || chainId === null || !sdk?.balanceWatcher) {
+      return;
+    }
+    setState((prev) => ({ ...prev, isRefreshing: true, error: null }));
+    try {
+      const chain = sdk.getChainById(chainId);
+      if (!chain) {
+        throw new Error(`Chain ${chainId} not supported`);
+      }
+      const newBalance = await sdk.balanceWatcher.getBalance(
+        address,
+        chain,
+        tokenAddress,
+        false
+        // Force fresh fetch, don't use cache
+      );
+      const formattedBalance = formatBalance(newBalance);
+      setState((prev) => ({
+        ...prev,
+        balance: formattedBalance,
+        previousBalance: prev.balance,
+        lastUpdated: /* @__PURE__ */ new Date(),
+        isRefreshing: false
+      }));
+      return formattedBalance;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      setState((prev) => ({
+        ...prev,
+        error: errorMessage,
+        isRefreshing: false
+      }));
+      onError?.(errorMessage);
+      throw error;
+    }
+  }, [address, chainId, tokenAddress, sdk, formatBalance, onError]);
+  const refreshAfterTransaction = React10.useCallback(async (transactionHash, maxWaitTime = 3e4) => {
+    if (!address || chainId === null || !sdk?.balanceWatcher) {
+      return;
+    }
+    setState((prev) => ({ ...prev, isRefreshing: true }));
+    try {
+      const chain = sdk.getChainById(chainId);
+      if (!chain) {
+        throw new Error(`Chain ${chainId} not supported`);
+      }
+      const update = await sdk.balanceWatcher.refreshBalanceAfterTransaction(
+        transactionHash,
+        address,
+        chain,
+        tokenAddress,
+        maxWaitTime
+      );
+      const formattedBalance = formatBalance(update.balance);
+      const formattedPrevious = update.previousBalance ? formatBalance(update.previousBalance) : null;
+      setState((prev) => ({
+        ...prev,
+        balance: formattedBalance,
+        previousBalance: formattedPrevious,
+        lastUpdated: new Date(update.timestamp),
+        isRefreshing: false
+      }));
+      return update;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to refresh balance";
+      setState((prev) => ({
+        ...prev,
+        error: errorMessage,
+        isRefreshing: false
+      }));
+      onError?.(errorMessage);
+      throw error;
+    }
+  }, [address, chainId, tokenAddress, sdk, formatBalance, onError]);
+  React10.useEffect(() => {
+    if (autoStart && address && chainId !== null && sdk) {
+      startWatching();
+    }
+    return () => {
+      stopWatching();
+    };
+  }, [address, chainId, autoStart, sdk, startWatching, stopWatching]);
+  React10.useEffect(() => {
+    setState({
+      balance: "0",
+      previousBalance: null,
+      isRefreshing: false,
+      lastUpdated: null,
+      error: null
+    });
+  }, [address, chainId, tokenAddress]);
+  return {
+    // State
+    ...state,
+    // Control functions
+    startWatching,
+    stopWatching,
+    refreshBalance,
+    refreshAfterTransaction,
+    // Status helpers
+    isWatching: isWatchingRef.current,
+    hasBalance: parseFloat(state.balance) > 0,
+    balanceChanged: state.previousBalance !== null && state.balance !== state.previousBalance,
+    // Formatted values
+    formattedBalance: state.balance,
+    balanceFloat: parseFloat(state.balance)
+  };
+};
+var useRelayProgress = (relayId, sourceChainId, destinationChainId, sourceTransactionHash, sdk, options = {}) => {
+  const {
+    enableNotifications = true,
+    autoStart = true,
+    maxWaitTime = 6e5,
+    // 10 minutes
+    onStatusChange,
+    onComplete,
+    onError
+  } = options;
+  const [state, setState] = React10.useState({
+    status: "initiated",
+    progress: 0,
+    relayId,
+    sourceTransactionHash,
+    destinationTransactionHash: null,
+    estimatedCompletionTime: null,
+    actualCompletionTime: null,
+    error: null,
+    isTracking: false
+  });
+  const { addNotification, updateNotification } = useNotifications();
+  const trackingPromiseRef = React10.useRef(null);
+  const notificationIdRef = React10.useRef(null);
+  const getStatusDisplayInfo = React10.useCallback((status, progress) => {
+    switch (status) {
+      case "initiated":
+        return {
+          title: "Relay Initiated",
+          message: "Cross-chain relay has been started",
+          emoji: "\u{1F680}",
+          type: "info"
+        };
+      case "pending":
+        return {
+          title: "Source Transaction Pending",
+          message: "Waiting for source transaction confirmation",
+          emoji: "\u23F3",
+          type: "pending"
+        };
+      case "relaying":
+        return {
+          title: "Relaying Across Chains",
+          message: `Bridging to ApeChain (${progress}% complete)`,
+          emoji: "\u{1F309}",
+          type: "pending"
+        };
+      case "completed":
+        return {
+          title: "Relay Complete! \u2705",
+          message: "Funds successfully bridged to ApeChain",
+          emoji: "\u2705",
+          type: "success"
+        };
+      case "failed":
+        return {
+          title: "Relay Failed",
+          message: "Cross-chain relay encountered an error",
+          emoji: "\u274C",
+          type: "error"
+        };
+      default:
+        return {
+          title: "Relay Status Unknown",
+          message: `Status: ${status}`,
+          emoji: "\u2753",
+          type: "info"
+        };
+    }
+  }, []);
+  const startTracking = React10.useCallback(async (rId, sourceChain, destChain, sourceTxHash) => {
+    if (!sdk?.relayStatus) {
+      console.error("SDK relay status service not available");
+      return;
+    }
+    setState((prev) => ({ ...prev, isTracking: true, error: null }));
+    try {
+      const sourceChainObj = sdk.getChainById(sourceChain);
+      const destChainObj = sdk.getChainById(destChain);
+      if (!sourceChainObj || !destChainObj) {
+        throw new Error(`Unsupported chain: source ${sourceChain}, dest ${destChain}`);
+      }
+      if (enableNotifications) {
+        notificationIdRef.current = addNotification({
+          type: "pending",
+          title: "Starting Cross-chain Relay \u{1F680}",
+          message: "Tracking relay progress to ApeChain...",
+          duration: 0,
+          transactionHash: sourceTxHash,
+          chainId: sourceChain
+        });
+      }
+      trackingPromiseRef.current = sdk.relayStatus.trackRelayWithCallback(
+        rId,
+        sourceChainObj,
+        destChainObj,
+        sourceTxHash,
+        (update) => {
+          setState((prev) => ({
+            ...prev,
+            status: update.status,
+            progress: update.progress,
+            destinationTransactionHash: update.destinationTransactionHash || prev.destinationTransactionHash,
+            error: update.error || null,
+            actualCompletionTime: update.status === "completed" ? update.timestamp : null
+          }));
+          if (enableNotifications && notificationIdRef.current) {
+            const displayInfo = getStatusDisplayInfo(update.status, update.progress);
+            updateNotification(notificationIdRef.current, {
+              type: displayInfo.type,
+              title: displayInfo.title,
+              message: displayInfo.message,
+              transactionHash: update.destinationTransactionHash || sourceTxHash,
+              chainId: update.destinationTransactionHash ? destChain : sourceChain,
+              duration: displayInfo.type === "success" || displayInfo.type === "error" ? 8e3 : 0
+            });
+          }
+          onStatusChange?.(update);
+        },
+        { maxWaitTime }
+      );
+      const finalStatus = await trackingPromiseRef.current;
+      setState((prev) => ({
+        ...prev,
+        isTracking: false,
+        destinationTransactionHash: finalStatus.destinationTransactionHash || prev.destinationTransactionHash,
+        estimatedCompletionTime: finalStatus.estimatedCompletionTime || null,
+        actualCompletionTime: finalStatus.actualCompletionTime || Date.now()
+      }));
+      onComplete?.(finalStatus);
+      return finalStatus;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown relay error";
+      setState((prev) => ({
+        ...prev,
+        error: errorMessage,
+        isTracking: false,
+        status: "failed"
+      }));
+      if (enableNotifications && notificationIdRef.current) {
+        updateNotification(notificationIdRef.current, {
+          type: "error",
+          title: "Relay Tracking Failed",
+          message: errorMessage,
+          duration: 8e3
+        });
+      }
+      onError?.(errorMessage);
+      throw error;
+    }
+  }, [sdk, enableNotifications, maxWaitTime, getStatusDisplayInfo, addNotification, updateNotification, onStatusChange, onComplete, onError]);
+  const stopTracking = React10.useCallback(() => {
+    if (relayId && sdk?.relayStatus) {
+      sdk.relayStatus.cancelRelayTracking(relayId);
+    }
+    trackingPromiseRef.current = null;
+    setState((prev) => ({ ...prev, isTracking: false }));
+  }, [relayId, sdk]);
+  const trackRelay = React10.useCallback((rId, sourceChain, destChain, sourceTxHash) => {
+    return startTracking(rId, sourceChain, destChain, sourceTxHash);
+  }, [startTracking]);
+  const getEstimatedTimeRemaining = React10.useCallback(() => {
+    if (!state.estimatedCompletionTime) return null;
+    const remaining = state.estimatedCompletionTime - Date.now();
+    return Math.max(0, remaining);
+  }, [state.estimatedCompletionTime]);
+  const formatTimeRemaining = React10.useCallback(() => {
+    const remaining = getEstimatedTimeRemaining();
+    if (!remaining) return null;
+    const minutes = Math.floor(remaining / 6e4);
+    const seconds = Math.floor(remaining % 6e4 / 1e3);
+    if (minutes > 0) {
+      return `~${minutes}m ${seconds}s`;
+    }
+    return `~${seconds}s`;
+  }, [getEstimatedTimeRemaining]);
+  React10.useEffect(() => {
+    if (autoStart && relayId && sourceChainId && destinationChainId && sourceTransactionHash && sdk) {
+      startTracking(relayId, sourceChainId, destinationChainId, sourceTransactionHash);
+    }
+    return () => {
+      stopTracking();
+    };
+  }, [
+    relayId,
+    sourceChainId,
+    destinationChainId,
+    sourceTransactionHash,
+    autoStart,
+    sdk,
+    startTracking,
+    stopTracking
+  ]);
+  React10.useEffect(() => {
+    setState((prev) => ({
+      ...prev,
+      relayId,
+      sourceTransactionHash,
+      destinationTransactionHash: null,
+      estimatedCompletionTime: null,
+      actualCompletionTime: null,
+      status: "initiated",
+      progress: 0,
+      error: null
+    }));
+  }, [relayId, sourceTransactionHash]);
+  return {
+    // State
+    ...state,
+    // Control functions
+    trackRelay,
+    stopTracking,
+    // Helper functions
+    getEstimatedTimeRemaining,
+    formatTimeRemaining,
+    // Status helpers
+    isInitiated: state.status === "initiated",
+    isPending: state.status === "pending",
+    isRelaying: state.status === "relaying",
+    isCompleted: state.status === "completed",
+    isFailed: state.status === "failed",
+    isActive: state.status === "pending" || state.status === "relaying",
+    // Progress helpers
+    progressPercent: `${state.progress}%`,
+    isNearComplete: state.progress >= 90,
+    hasDestinationTx: !!state.destinationTransactionHash
+  };
+};
+var LiveBalanceDisplay = ({
+  address,
+  chainId,
+  tokenAddress,
+  sdk,
+  tokenSymbol = "ETH",
+  tokenDecimals = 18,
+  className = "",
+  showRefreshButton = true,
+  showTrend = true,
+  enableNotifications = false,
+  autoRefresh = true
+}) => {
+  const [isManualRefresh, setIsManualRefresh] = React10.useState(false);
+  const {
+    balance,
+    previousBalance,
+    isRefreshing,
+    lastUpdated,
+    error,
+    isWatching,
+    balanceChanged,
+    refreshBalance,
+    refreshAfterTransaction
+  } = useBalanceWatcher(
+    address,
+    chainId,
+    tokenAddress,
+    sdk,
+    {
+      enableNotifications,
+      autoStart: autoRefresh,
+      onBalanceChange: (update) => {
+        console.log("Balance updated:", update);
+      },
+      onError: (error2) => {
+        console.error("Balance watcher error:", error2);
+      }
+    }
+  );
+  const handleManualRefresh = async () => {
+    setIsManualRefresh(true);
+    try {
+      await refreshBalance();
+    } catch (error2) {
+      console.error("Manual refresh failed:", error2);
+    } finally {
+      setIsManualRefresh(false);
+    }
+  };
+  const getTrendDirection = () => {
+    if (!previousBalance || !balanceChanged) return "none";
+    const current = parseFloat(balance);
+    const previous = parseFloat(previousBalance);
+    if (current > previous) return "up";
+    if (current < previous) return "down";
+    return "none";
+  };
+  const formatBalance = (bal) => {
+    const num = parseFloat(bal);
+    if (num === 0) return "0";
+    if (num < 1e-4) return "< 0.0001";
+    if (num < 1) return num.toFixed(6);
+    if (num < 1e3) return num.toFixed(4);
+    if (num < 1e6) return `${(num / 1e3).toFixed(2)}K`;
+    return `${(num / 1e6).toFixed(2)}M`;
+  };
+  const trendDirection = getTrendDirection();
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `flex flex-col space-y-2 ${className}`, children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-2", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-sm font-medium text-gray-600", children: [
+          tokenAddress ? tokenSymbol : "Native",
+          " Balance:"
+        ] }),
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-1", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("span", { className: `text-lg font-semibold ${error ? "text-red-500" : "text-gray-900"}`, children: error ? "Error" : formatBalance(balance) }),
+          !error && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-sm text-gray-500", children: tokenSymbol }),
+          showTrend && trendDirection !== "none" && !error && /* @__PURE__ */ jsxRuntime.jsx("div", { className: `flex items-center ${trendDirection === "up" ? "text-green-500" : "text-red-500"}`, children: trendDirection === "up" ? /* @__PURE__ */ jsxRuntime.jsx(TrendingUp, { size: 16 }) : /* @__PURE__ */ jsxRuntime.jsx(TrendingDown, { size: 16 }) })
+        ] })
+      ] }),
+      showRefreshButton && /* @__PURE__ */ jsxRuntime.jsx(
+        "button",
+        {
+          onClick: handleManualRefresh,
+          disabled: isRefreshing || isManualRefresh || !address,
+          className: `p-1.5 rounded-md transition-colors ${isRefreshing || isManualRefresh ? "text-gray-400 cursor-not-allowed" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`,
+          title: "Refresh balance",
+          children: /* @__PURE__ */ jsxRuntime.jsx(
+            RefreshCw,
+            {
+              size: 16,
+              className: isRefreshing || isManualRefresh ? "animate-spin" : ""
+            }
+          )
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between text-xs text-gray-500", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-2", children: [
+        /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-1", children: [
+          /* @__PURE__ */ jsxRuntime.jsx("div", { className: `w-2 h-2 rounded-full ${isWatching ? "bg-green-500" : "bg-gray-300"}` }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { children: isWatching ? "Live" : "Static" })
+        ] }),
+        lastUpdated && /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
+          "Updated: ",
+          lastUpdated.toLocaleTimeString()
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-1", children: [
+        isRefreshing && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-blue-500", children: "Refreshing..." }),
+        error && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-1 text-red-500", children: [
+          /* @__PURE__ */ jsxRuntime.jsx(AlertCircle, { size: 12 }),
+          /* @__PURE__ */ jsxRuntime.jsx("span", { children: "Error" })
+        ] })
+      ] })
+    ] }),
+    error && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-xs text-red-600 bg-red-50 p-2 rounded", children: error }),
+    showTrend && previousBalance && balanceChanged && !error && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-xs text-gray-500", children: [
+      "Previous: ",
+      formatBalance(previousBalance),
+      " ",
+      tokenSymbol
+    ] })
+  ] });
+};
+var MultiTokenBalanceDisplay = ({
+  address,
+  chainId,
+  tokens,
+  sdk,
+  className = "",
+  showRefreshButton = true,
+  enableNotifications = false
+}) => {
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `space-y-3 ${className}`, children: tokens.map((token, index) => /* @__PURE__ */ jsxRuntime.jsx(
+    LiveBalanceDisplay,
+    {
+      address,
+      chainId,
+      tokenAddress: token.address,
+      sdk,
+      tokenSymbol: token.symbol,
+      tokenDecimals: token.decimals,
+      showRefreshButton,
+      showTrend: true,
+      enableNotifications,
+      autoRefresh: true
+    },
+    `${chainId}-${token.address || "native"}-${index}`
+  )) });
+};
+var RelayProgressIndicator = ({
+  relayId,
+  sourceChainId,
+  destinationChainId,
+  sourceTransactionHash,
+  sdk,
+  className = "",
+  showTimeEstimate = true,
+  showTransactionLinks = true,
+  compact = false,
+  onComplete
+}) => {
+  const {
+    status,
+    progress,
+    destinationTransactionHash,
+    error,
+    isTracking,
+    formatTimeRemaining,
+    isCompleted,
+    isFailed,
+    isActive
+  } = useRelayProgress(
+    relayId,
+    sourceChainId,
+    destinationChainId,
+    sourceTransactionHash,
+    sdk,
+    {
+      enableNotifications: true,
+      onComplete: (finalStatus) => {
+        console.log("Relay completed:", finalStatus);
+        onComplete?.();
+      },
+      onError: (error2) => {
+        console.error("Relay error:", error2);
+      }
+    }
+  );
+  const getChainName2 = (chainId) => {
+    if (!chainId) return "Unknown";
+    const chainMap = {
+      1: "Ethereum",
+      137: "Polygon",
+      10: "Optimism",
+      56: "BSC",
+      43114: "Avalanche",
+      8453: "Base",
+      42161: "Arbitrum",
+      167e3: "Taiko",
+      2741: "Abstract",
+      33139: "ApeChain",
+      // Testnets
+      17e3: "Holesky",
+      80002: "Amoy",
+      33111: "Curtis"
+    };
+    return chainMap[chainId] || `Chain ${chainId}`;
+  };
+  const getExplorerUrl = (txHash, chainId) => {
+    const explorerMap = {
+      1: "https://etherscan.io/tx/",
+      137: "https://polygonscan.com/tx/",
+      10: "https://optimistic.etherscan.io/tx/",
+      56: "https://bscscan.com/tx/",
+      43114: "https://snowtrace.io/tx/",
+      8453: "https://basescan.org/tx/",
+      42161: "https://arbiscan.io/tx/",
+      167e3: "https://taikoscan.io/tx/",
+      2741: "https://explorer.abstract.xyz/tx/",
+      33139: "https://apechain.calderaexplorer.xyz/tx/",
+      // Testnets
+      17e3: "https://holesky.etherscan.io/tx/",
+      80002: "https://amoy.polygonscan.com/tx/",
+      33111: "https://curtis.explorer.caldera.xyz/tx/"
+    };
+    return `${explorerMap[chainId] || "#"}${txHash}`;
+  };
+  const getStatusConfig = () => {
+    switch (status) {
+      case "initiated":
+        return {
+          color: "blue",
+          icon: Clock,
+          title: "Relay Initiated",
+          description: "Cross-chain relay starting..."
+        };
+      case "pending":
+        return {
+          color: "yellow",
+          icon: Clock,
+          title: "Source Pending",
+          description: "Waiting for source transaction confirmation"
+        };
+      case "relaying":
+        return {
+          color: "blue",
+          icon: ArrowRight,
+          title: "Relaying",
+          description: "Bridging funds to ApeChain"
+        };
+      case "completed":
+        return {
+          color: "green",
+          icon: CheckCircle,
+          title: "Completed",
+          description: "Relay successful!"
+        };
+      case "failed":
+        return {
+          color: "red",
+          icon: XCircle,
+          title: "Failed",
+          description: error || "Relay encountered an error"
+        };
+      default:
+        return {
+          color: "gray",
+          icon: Clock,
+          title: "Unknown",
+          description: "Relay status unknown"
+        };
+    }
+  };
+  const statusConfig = getStatusConfig();
+  const StatusIcon = statusConfig.icon;
+  const timeRemaining = formatTimeRemaining();
+  if (compact) {
+    return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `flex items-center space-x-2 ${className}`, children: [
+      /* @__PURE__ */ jsxRuntime.jsx(
+        StatusIcon,
+        {
+          size: 16,
+          className: `text-${statusConfig.color}-500`
+        }
+      ),
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-sm font-medium", children: statusConfig.title }),
+      /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-xs text-gray-500", children: [
+        progress,
+        "%"
+      ] })
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `bg-white border border-gray-200 rounded-lg p-4 ${className}`, children: [
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between mb-3", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-2", children: [
+        /* @__PURE__ */ jsxRuntime.jsx(
+          StatusIcon,
+          {
+            size: 20,
+            className: `text-${statusConfig.color}-500`
+          }
+        ),
+        /* @__PURE__ */ jsxRuntime.jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Cross-chain Relay" })
+      ] }),
+      isTracking && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center space-x-1 text-xs text-blue-600", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "w-2 h-2 bg-blue-500 rounded-full animate-pulse" }),
+        /* @__PURE__ */ jsxRuntime.jsx("span", { children: "Live" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-center mb-4 text-sm text-gray-600", children: [
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium", children: getChainName2(sourceChainId) }),
+      /* @__PURE__ */ jsxRuntime.jsx(ArrowRight, { size: 16, className: "mx-2 text-gray-400" }),
+      /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium", children: getChainName2(destinationChainId) })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mb-4", children: [
+      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex justify-between text-sm text-gray-600 mb-1", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("span", { children: statusConfig.title }),
+        /* @__PURE__ */ jsxRuntime.jsxs("span", { children: [
+          progress,
+          "%"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: /* @__PURE__ */ jsxRuntime.jsx(
+        "div",
+        {
+          className: `h-2 rounded-full transition-all duration-300 ${isFailed ? "bg-red-500" : isCompleted ? "bg-green-500" : "bg-blue-500"}`,
+          style: { width: `${progress}%` }
+        }
+      ) })
+    ] }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "mb-3", children: [
+      /* @__PURE__ */ jsxRuntime.jsx("p", { className: `text-sm ${isFailed ? "text-red-600" : "text-gray-600"}`, children: statusConfig.description }),
+      showTimeEstimate && timeRemaining && isActive && /* @__PURE__ */ jsxRuntime.jsxs("p", { className: "text-xs text-gray-500 mt-1", children: [
+        "Estimated time remaining: ",
+        timeRemaining
+      ] })
+    ] }),
+    showTransactionLinks && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "space-y-2 text-sm", children: [
+      sourceTransactionHash && sourceChainId && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-gray-600", children: "Source Transaction:" }),
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "a",
+          {
+            href: getExplorerUrl(sourceTransactionHash, sourceChainId),
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: "flex items-center space-x-1 text-blue-600 hover:text-blue-800",
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: `${sourceTransactionHash.slice(0, 6)}...${sourceTransactionHash.slice(-4)}` }),
+              /* @__PURE__ */ jsxRuntime.jsx(ExternalLink, { size: 12 })
+            ]
+          }
+        )
+      ] }),
+      destinationTransactionHash && destinationChainId && /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between", children: [
+        /* @__PURE__ */ jsxRuntime.jsx("span", { className: "text-gray-600", children: "Destination Transaction:" }),
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          "a",
+          {
+            href: getExplorerUrl(destinationTransactionHash, destinationChainId),
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: "flex items-center space-x-1 text-blue-600 hover:text-blue-800",
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { children: `${destinationTransactionHash.slice(0, 6)}...${destinationTransactionHash.slice(-4)}` }),
+              /* @__PURE__ */ jsxRuntime.jsx(ExternalLink, { size: 12 })
+            ]
+          }
+        )
+      ] })
+    ] }),
+    relayId && /* @__PURE__ */ jsxRuntime.jsx("div", { className: "mt-3 pt-3 border-t border-gray-100", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-xs text-gray-500", children: [
+      "Relay ID: ",
+      relayId
+    ] }) })
+  ] });
+};
+var RelayStatusBadge = ({
+  status,
+  progress,
+  className = ""
+}) => {
+  const getStatusColor = (status2) => {
+    switch (status2) {
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "failed":
+        return "bg-red-100 text-red-800";
+      case "relaying":
+        return "bg-blue-100 text-blue-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+  return /* @__PURE__ */ jsxRuntime.jsxs("span", { className: `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(status)} ${className}`, children: [
+    status,
+    " (",
+    progress,
+    "%)"
+  ] });
+};
 
 // src/index.ts
-var UI_VERSION = "2.1.0";
+var UI_VERSION = "2.3.0";
 var FEE_STRUCTURE = {
   PLATFORM_PERCENTAGE: 5,
   // Platform always takes 5% for tips
@@ -4035,9 +5071,13 @@ exports.CreatorAnalyticsDashboard = CreatorAnalyticsDashboard;
 exports.CreatorManagement = CreatorManagement;
 exports.CreatorSelector = CreatorSelector;
 exports.FEE_STRUCTURE = FEE_STRUCTURE;
+exports.LiveBalanceDisplay = LiveBalanceDisplay;
 exports.LocalTransactionHistoryService = LocalTransactionHistoryService;
+exports.MultiTokenBalanceDisplay = MultiTokenBalanceDisplay;
 exports.NotificationProvider = NotificationProvider;
 exports.NotificationToast = NotificationToast;
+exports.RelayProgressIndicator = RelayProgressIndicator;
+exports.RelayStatusBadge = RelayStatusBadge;
 exports.RewardPoolInterface = RewardPoolInterface;
 exports.TransactionHistory = TransactionHistory;
 exports.TransactionStatusMessage = TransactionStatusMessage;
@@ -4056,7 +5096,10 @@ exports.getTokenOptions = getTokenOptions;
 exports.isValidAddress = isValidAddress;
 exports.transactionBuilder = transactionBuilder;
 exports.truncateAddress = truncateAddress;
+exports.useBalanceWatcher = useBalanceWatcher;
 exports.useNotifications = useNotifications;
+exports.useRelayProgress = useRelayProgress;
+exports.useTransactionMonitor = useTransactionMonitor;
 exports.useTransactionNotifications = useTransactionNotifications;
 //# sourceMappingURL=index.cjs.map
 //# sourceMappingURL=index.cjs.map
