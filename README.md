@@ -5,6 +5,7 @@ React UI components for TippingChain v2.0 - a unified multi-chain tipping platfo
 ## Version 2.0 Updates
 
 - ✨ **Integrated Architecture**: Components work with v2.0 SDK and integrated Relay.link contracts
+- 🔐 **Admin Role System**: CreatorManagement component supports multi-admin creator management
 - 🧪 **Testnet Support**: Holesky (Ethereum) and Amoy (Polygon) testnet compatibility
 - 📊 **Dynamic Fees**: Components now show tier-based creator/business splits (60/40, 70/30, 80/20, 90/10)
 - 💰 **Accurate Fee Display**: 5% platform fee for tips, 1% for viewer rewards
@@ -15,7 +16,7 @@ React UI components for TippingChain v2.0 - a unified multi-chain tipping platfo
 - 🎯 **Easy Tipping**: Tip creators using simple creator IDs with dynamic fee display
 - 🎁 **Viewer Rewards**: Full batch rewards, pool distribution, and individual rewards
 - 🔍 **Creator Search**: Search by ID, wallet address, or thirdweb ID
-- ⚙️ **Admin Tools**: Creator management with wallet recovery and tier updates
+- ⚙️ **Admin Tools**: Multi-admin creator management with wallet recovery and tier updates
 - 📊 **Analytics**: Platform statistics and top creator displays
 - 🔑 **Thirdweb Integration**: Full support for thirdweb account IDs and smart accounts
 - 🎨 **Beautiful UI**: Modern, responsive design with Tailwind CSS
@@ -120,7 +121,7 @@ import { CreatorSelector } from '@tippingchain/ui-react';
 
 ### CreatorManagement
 
-Admin component for managing creators and platform analytics.
+Admin component for managing creators and platform analytics. Supports both contract owner and designated admins.
 
 ```tsx
 import { CreatorManagement } from '@tippingchain/ui-react';
@@ -129,6 +130,7 @@ import { CreatorManagement } from '@tippingchain/ui-react';
   sdkConfig={{ client, sdk }}
   chainId={137}
   onCreatorAdded={(creatorId) => console.log('Added:', creatorId)}
+  // Component automatically detects if connected wallet has admin permissions
 />
 ```
 
