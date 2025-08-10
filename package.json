@@ -1,8 +1,8 @@
 {
   "name": "@tippingchain/ui-react",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "type": "module", 
-  "description": "TippingChain UI v2.3 - React components with real-time monitoring, live balance updates, relay progress tracking, and multi-chain tipping with USDC payouts",
+  "description": "TippingChain UI v2.4 - React components with admin role system, real-time monitoring, live balance updates, relay progress tracking, and multi-chain tipping with USDC payouts",
   "main": "./dist/index.js",
   "types": "./src/index.ts",
   "author": "TippingChain Team",
@@ -61,8 +61,8 @@
     }
   },
   "dependencies": {
-    "@tippingchain/contracts-interface": "^1.2.0",
-    "@tippingchain/sdk": "^2.2.0",
+    "@tippingchain/contracts-interface": "^1.3.0",
+    "@tippingchain/sdk": "^2.3.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.263.1"
   },
