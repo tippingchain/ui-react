@@ -1,7 +1,7 @@
 {
   "name": "@tippingchain/ui-react",
-  "version": "2.4.0",
-  "type": "module", 
+  "version": "2.5.0",
+  "type": "module",
   "description": "TippingChain UI v2.4 - React components with admin role system, real-time monitoring, live balance updates, relay progress tracking, and multi-chain tipping with USDC payouts",
   "main": "./dist/index.js",
   "types": "./src/index.ts",
@@ -37,7 +37,7 @@
   "keywords": [
     "react",
     "tipping",
-    "apechain", 
+    "apechain",
     "web3",
     "ui",
     "components",
@@ -87,6 +87,6 @@
     "thirdweb": "^5.105.26",
     "ts-jest": "^29.0.0",
     "tsup": "^8.5.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.9.2"
   }
 }
