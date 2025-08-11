@@ -325,8 +325,8 @@ export const StreamingPage: React.FC<StreamingPageProps> = ({
   };
 
   return (
-    <div className={`min-h-screen bg-gray-900 py-8 ${className}`}>
-      <div className="max-w-7xl mx-auto px-4">
+    <div className={`min-h-screen bg-gray-900 ${className}`}>
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
