@@ -1677,9 +1677,9 @@ var MultiTokenTippingInterface = ({
       return;
     }
     const amountNum = parseFloat(amount);
-    const balanceNum = parseFloat(userBalance);
+    const balanceNum = parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18);
     if (amountNum > balanceNum) {
-      setBalanceWarning(`Insufficient ${selectedToken.symbol} balance. You have ${formatTokenAmount2(userBalance, selectedToken.decimals)}`);
+      setBalanceWarning(`Insufficient ${selectedToken.symbol} balance. You have ${formatTokenAmount2(balanceNum, 4)}`);
     } else {
       setBalanceWarning("");
     }
@@ -1973,14 +1973,14 @@ var MultiTokenTippingInterface = ({
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex justify-between items-center mt-2 text-sm", children: [
           /* @__PURE__ */ jsxRuntime.jsxs("span", { className: "text-gray-600", children: [
             "Balance: ",
-            formatTokenAmount2(userBalance, selectedToken.decimals),
+            formatTokenAmount2(parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18), 4),
             " ",
             selectedToken.symbol
           ] }),
           /* @__PURE__ */ jsxRuntime.jsx(
             "button",
             {
-              onClick: () => setAmount((parseFloat(userBalance) * 0.95).toString()),
+              onClick: () => setAmount((parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18) * 0.95).toString()),
               className: "text-blue-600 hover:text-blue-700 font-medium",
               children: "Max"
             }
@@ -6593,7 +6593,7 @@ var StreamingPage = ({
       )
     ] });
   };
-  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `min-h-screen bg-gray-900 py-8 ${className}`, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "max-w-7xl mx-auto px-4", children: [
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { className: `min-h-screen bg-gray-900 ${className}`, children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "max-w-7xl mx-auto px-4 py-8", children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-center mb-8", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("h1", { className: "text-4xl font-bold text-white mb-4", children: [
         "\u{1F534} ",

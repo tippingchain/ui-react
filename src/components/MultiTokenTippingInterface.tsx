@@ -68,6 +68,9 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
   const [userBalance, setUserBalance] = useState<string>('0');
   const [loadingBalance, setLoadingBalance] = useState<boolean>(false);
   const [tokenBalances, setTokenBalances] = useState<Record<string, string>>({});
+  const [inputMode, setInputMode] = useState<'token' | 'usd'>('token');
+  const [usdAmount, setUsdAmount] = useState('');
+  const [tokenPrice, setTokenPrice] = useState<number>(0);
   
   const chainTokens = activeChain ? getAllTokensForChain(activeChain.id) : [];
 
@@ -147,11 +150,11 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
     }
 
     const amountNum = parseFloat(amount);
-    const balanceNum = parseFloat(userBalance);
+    const balanceNum = parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18);
     
     // Check balance
     if (amountNum > balanceNum) {
-      setBalanceWarning(`Insufficient ${selectedToken.symbol} balance. You have ${formatTokenAmount(userBalance, selectedToken.decimals)}`);
+      setBalanceWarning(`Insufficient ${selectedToken.symbol} balance. You have ${formatTokenAmount(balanceNum, 4)}`);
     } else {
       setBalanceWarning('');
     }
@@ -210,11 +213,12 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
         const creatorAmountEth = parseFloat(tipSplits.creatorAmount) / Math.pow(10, selectedToken.decimals || 18);
         const businessAmountEth = parseFloat(tipSplits.businessAmount) / Math.pow(10, selectedToken.decimals || 18);
         
-        // Estimate USD value (rough conversion for display)
+        // Get current token price (using the same rates)
         const rates: Record<string, number> = {
           'ETH': 2400, 'MATIC': 0.85, 'BNB': 320, 'AVAX': 35, 'APE': 1.2,
           'USDC': 1, 'USDT': 1, 'DAI': 1, 'BUSD': 1
         };
+        setTokenPrice(rates[selectedToken.symbol] || 1);
         const usdRate = rates[selectedToken.symbol] || 1;
         const totalUsdValue = parseFloat(amount) * usdRate;
         const estimatedUsdc = totalUsdValue * 0.98; // Rough estimate after relay fees
@@ -507,35 +511,129 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
           </div>
         </div>
 
-        {/* Amount Input */}
+        {/* Amount Input with USD/Token Toggle */}
         {selectedToken && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Amount to tip
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                placeholder="0.0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${
-                  balanceWarning ? 'border-red-300' : 'border-gray-300'
-                }`}
-                step={selectedToken.decimals === 6 ? '0.01' : '0.001'}
-              />
-              <div className="absolute right-3 top-2 text-sm text-gray-500">
-                {selectedToken.symbol}
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Amount to tip
+              </label>
+              <div className="flex items-center bg-gray-100 rounded-md p-1">
+                <button
+                  onClick={() => {
+                    setInputMode('token');
+                    if (usdAmount && tokenPrice > 0) {
+                      setAmount((parseFloat(usdAmount) / tokenPrice).toFixed(6));
+                    }
+                  }}
+                  className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                    inputMode === 'token'
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  {selectedToken.symbol}
+                </button>
+                <button
+                  onClick={() => {
+                    setInputMode('usd');
+                    if (amount && tokenPrice > 0) {
+                      setUsdAmount((parseFloat(amount) * tokenPrice).toFixed(2));
+                    }
+                  }}
+                  className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                    inputMode === 'usd'
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  USD
+                </button>
               </div>
             </div>
+            <div className="relative">
+              {inputMode === 'token' ? (
+                <>
+                  <input
+                    type="number"
+                    placeholder="0.0"
+                    value={amount}
+                    onChange={(e) => {
+                      setAmount(e.target.value);
+                      if (e.target.value && tokenPrice > 0) {
+                        setUsdAmount((parseFloat(e.target.value) * tokenPrice).toFixed(2));
+                      } else {
+                        setUsdAmount('');
+                      }
+                    }}
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${
+                      balanceWarning ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    step={selectedToken.decimals === 6 ? '0.01' : '0.001'}
+                  />
+                  <div className="absolute right-3 top-2 text-sm text-gray-500">
+                    {selectedToken.symbol}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={usdAmount}
+                    onChange={(e) => {
+                      setUsdAmount(e.target.value);
+                      if (e.target.value && tokenPrice > 0) {
+                        setAmount((parseFloat(e.target.value) / tokenPrice).toFixed(6));
+                      } else {
+                        setAmount('');
+                      }
+                    }}
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${
+                      balanceWarning ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    step="0.01"
+                  />
+                  <div className="absolute right-3 top-2 text-sm text-gray-500">
+                    USD
+                  </div>
+                </>
+              )}
+            </div>
+            
+            {/* Real-time Conversion Display */}
+            {amount && tokenPrice > 0 && (
+              <div className="mt-1 text-xs text-gray-500 text-center">
+                {inputMode === 'token' ? (
+                  <span>
+                    {amount} {selectedToken.symbol} ≈ ${(parseFloat(amount) * tokenPrice).toFixed(2)} USD
+                  </span>
+                ) : (
+                  <span>
+                    ${usdAmount} USD ≈ {(parseFloat(usdAmount || '0') / tokenPrice).toFixed(6)} {selectedToken.symbol}
+                  </span>
+                )}
+              </div>
+            )}
             
             {/* Balance Display */}
             <div className="flex justify-between items-center mt-2 text-sm">
               <span className="text-gray-600">
-                Balance: {formatTokenAmount(userBalance, selectedToken.decimals)} {selectedToken.symbol}
+                Balance: {formatTokenAmount(parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18), 4)} {selectedToken.symbol}
+                {tokenPrice > 0 && (
+                  <span className="text-gray-400 ml-1">
+                    (≈${((parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18)) * tokenPrice).toFixed(2)})
+                  </span>
+                )}
               </span>
               <button 
-                onClick={() => setAmount((parseFloat(userBalance) * 0.95).toString())}
+                onClick={() => {
+                  const maxTokenAmount = ((parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18)) * 0.95);
+                  setAmount(maxTokenAmount.toString());
+                  if (tokenPrice > 0) {
+                    setUsdAmount((maxTokenAmount * tokenPrice).toFixed(2));
+                  }
+                }}
                 className="text-blue-600 hover:text-blue-700 font-medium"
               >
                 Max
