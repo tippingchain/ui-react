@@ -1,20 +1,20 @@
 {
   "name": "@tippingchain/ui-react",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "type": "module",
-  "description": "TippingChain UI v2.4 - React components with admin role system, real-time monitoring, live balance updates, relay progress tracking, and multi-chain tipping with USDC payouts",
+  "description": "TippingChain UI - React components",
   "main": "./dist/index.js",
   "types": "./src/index.ts",
   "author": "TippingChain Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tippingchain/tippingchain.git",
+    "url": "https://github.com/tippingchain/ui-react.git",
     "directory": "packages/ui"
   },
-  "homepage": "https://github.com/tippingchain/tippingchain#readme",
+  "homepage": "https://github.com/tippingchain/ui-react#readme",
   "bugs": {
-    "url": "https://github.com/tippingchain/tippingchain/issues"
+    "url": "https://github.com/tippingchain/ui-react/issues"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -61,8 +61,8 @@
     }
   },
   "dependencies": {
-    "@tippingchain/contracts-interface": "^1.4.0",
-    "@tippingchain/sdk": "^2.4.0",
+    "@tippingchain/contracts-interface": "^1.4.1",
+    "@tippingchain/sdk": "^2.4.1",
     "clsx": "^2.0.0",
     "lucide-react": "^0.263.1"
   },
@@ -85,7 +85,7 @@
     "rollup-plugin-dts": "^6.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "thirdweb": "^5.105.26",
-    "ts-jest": "^29.0.0",
+    "ts-jest": "^29.4.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
   }
