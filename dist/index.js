@@ -1617,6 +1617,9 @@ var MultiTokenTippingInterface = ({
   const [userBalance, setUserBalance] = useState("0");
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [tokenBalances, setTokenBalances] = useState({});
+  const [inputMode, setInputMode] = useState("token");
+  const [usdAmount, setUsdAmount] = useState("");
+  const [tokenPrice, setTokenPrice] = useState(0);
   const chainTokens = activeChain ? getAllTokensForChain(activeChain.id) : [];
   const loadTokenBalances = async (showNotification = false) => {
     if (!account?.address || !activeChain || chainTokens.length === 0) {
@@ -1728,6 +1731,7 @@ var MultiTokenTippingInterface = ({
           "DAI": 1,
           "BUSD": 1
         };
+        setTokenPrice(rates[selectedToken.symbol] || 1);
         const usdRate = rates[selectedToken.symbol] || 1;
         const totalUsdValue = parseFloat(amount) * usdRate;
         const estimatedUsdc = totalUsdValue * 0.98;
@@ -1949,32 +1953,115 @@ var MultiTokenTippingInterface = ({
         }) })
       ] }),
       selectedToken && /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Amount to tip" }),
-        /* @__PURE__ */ jsxs("div", { className: "relative", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-2", children: [
+          /* @__PURE__ */ jsx("label", { className: "block text-sm font-medium text-gray-700", children: "Amount to tip" }),
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center bg-gray-100 rounded-md p-1", children: [
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                onClick: () => {
+                  setInputMode("token");
+                  if (usdAmount && tokenPrice > 0) {
+                    setAmount((parseFloat(usdAmount) / tokenPrice).toFixed(6));
+                  }
+                },
+                className: `px-3 py-1 rounded text-xs font-medium transition-colors ${inputMode === "token" ? "bg-white text-blue-600 shadow-sm" : "text-gray-600 hover:text-gray-800"}`,
+                children: selectedToken.symbol
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                onClick: () => {
+                  setInputMode("usd");
+                  if (amount && tokenPrice > 0) {
+                    setUsdAmount((parseFloat(amount) * tokenPrice).toFixed(2));
+                  }
+                },
+                className: `px-3 py-1 rounded text-xs font-medium transition-colors ${inputMode === "usd" ? "bg-white text-blue-600 shadow-sm" : "text-gray-600 hover:text-gray-800"}`,
+                children: "USD"
+              }
+            )
+          ] })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "relative", children: inputMode === "token" ? /* @__PURE__ */ jsxs(Fragment, { children: [
           /* @__PURE__ */ jsx(
             "input",
             {
               type: "number",
               placeholder: "0.0",
               value: amount,
-              onChange: (e) => setAmount(e.target.value),
+              onChange: (e) => {
+                setAmount(e.target.value);
+                if (e.target.value && tokenPrice > 0) {
+                  setUsdAmount((parseFloat(e.target.value) * tokenPrice).toFixed(2));
+                } else {
+                  setUsdAmount("");
+                }
+              },
               className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${balanceWarning ? "border-red-300" : "border-gray-300"}`,
               step: selectedToken.decimals === 6 ? "0.01" : "0.001"
             }
           ),
           /* @__PURE__ */ jsx("div", { className: "absolute right-3 top-2 text-sm text-gray-500", children: selectedToken.symbol })
-        ] }),
+        ] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+          /* @__PURE__ */ jsx(
+            "input",
+            {
+              type: "number",
+              placeholder: "0.00",
+              value: usdAmount,
+              onChange: (e) => {
+                setUsdAmount(e.target.value);
+                if (e.target.value && tokenPrice > 0) {
+                  setAmount((parseFloat(e.target.value) / tokenPrice).toFixed(6));
+                } else {
+                  setAmount("");
+                }
+              },
+              className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${balanceWarning ? "border-red-300" : "border-gray-300"}`,
+              step: "0.01"
+            }
+          ),
+          /* @__PURE__ */ jsx("div", { className: "absolute right-3 top-2 text-sm text-gray-500", children: "USD" })
+        ] }) }),
+        amount && tokenPrice > 0 && /* @__PURE__ */ jsx("div", { className: "mt-1 text-xs text-gray-500 text-center", children: inputMode === "token" ? /* @__PURE__ */ jsxs("span", { children: [
+          amount,
+          " ",
+          selectedToken.symbol,
+          " \u2248 $",
+          (parseFloat(amount) * tokenPrice).toFixed(2),
+          " USD"
+        ] }) : /* @__PURE__ */ jsxs("span", { children: [
+          "$",
+          usdAmount,
+          " USD \u2248 ",
+          (parseFloat(usdAmount || "0") / tokenPrice).toFixed(6),
+          " ",
+          selectedToken.symbol
+        ] }) }),
         /* @__PURE__ */ jsxs("div", { className: "flex justify-between items-center mt-2 text-sm", children: [
           /* @__PURE__ */ jsxs("span", { className: "text-gray-600", children: [
             "Balance: ",
             formatTokenAmount2(parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18), 4),
             " ",
-            selectedToken.symbol
+            selectedToken.symbol,
+            tokenPrice > 0 && /* @__PURE__ */ jsxs("span", { className: "text-gray-400 ml-1", children: [
+              "(\u2248$",
+              (parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18) * tokenPrice).toFixed(2),
+              ")"
+            ] })
           ] }),
           /* @__PURE__ */ jsx(
             "button",
             {
-              onClick: () => setAmount((parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18) * 0.95).toString()),
+              onClick: () => {
+                const maxTokenAmount = parseFloat(userBalance) / Math.pow(10, selectedToken.decimals || 18) * 0.95;
+                setAmount(maxTokenAmount.toString());
+                if (tokenPrice > 0) {
+                  setUsdAmount((maxTokenAmount * tokenPrice).toFixed(2));
+                }
+              },
               className: "text-blue-600 hover:text-blue-700 font-medium",
               children: "Max"
             }
@@ -9032,9 +9119,267 @@ var TransactionHistoryPage = ({
     ] })
   ] }) });
 };
+var AdminContractControls = ({
+  sdkConfig,
+  chainId,
+  onOperationSuccess,
+  onOperationError,
+  className = ""
+}) => {
+  const { sdk } = sdkConfig;
+  const [isPaused, setIsPaused] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [relayerAddress, setRelayerAddress] = useState("");
+  const [emergencyWithdrawAmount, setEmergencyWithdrawAmount] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    const fetchContractState = async () => {
+      try {
+        setIsPaused(false);
+      } catch (error) {
+        console.error("Error fetching contract state:", error);
+        setErrorMessage("Failed to load contract state. Please try again.");
+      }
+    };
+    fetchContractState();
+  }, [sdk, chainId]);
+  const handlePause = async () => {
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      setIsPaused(true);
+      if (onOperationSuccess) onOperationSuccess("pause", { message: "Paused (placeholder)" });
+    } catch (error) {
+      console.error("Error pausing contract:", error);
+      setErrorMessage("Failed to pause contract. Please check console for details.");
+      if (onOperationError) onOperationError("pause", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleUnpause = async () => {
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      setIsPaused(false);
+      if (onOperationSuccess) onOperationSuccess("unpause", { message: "Unpaused (placeholder)" });
+    } catch (error) {
+      console.error("Error unpausing contract:", error);
+      setErrorMessage("Failed to unpause contract. Please check console for details.");
+      if (onOperationError) onOperationError("unpause", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleAddRelayer = async () => {
+    if (!relayerAddress) {
+      setErrorMessage("Please enter a valid relayer address.");
+      return;
+    }
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      if (onOperationSuccess) onOperationSuccess("addRelayer", { message: "Relayer added (placeholder)" });
+      setRelayerAddress("");
+    } catch (error) {
+      console.error("Error adding relayer:", error);
+      setErrorMessage("Failed to add relayer. Please check console for details.");
+      if (onOperationError) onOperationError("addRelayer", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleRemoveRelayer = async () => {
+    if (!relayerAddress) {
+      setErrorMessage("Please enter a valid relayer address.");
+      return;
+    }
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      if (onOperationSuccess) onOperationSuccess("removeRelayer", { message: "Relayer removed (placeholder)" });
+      setRelayerAddress("");
+    } catch (error) {
+      console.error("Error removing relayer:", error);
+      setErrorMessage("Failed to remove relayer. Please check console for details.");
+      if (onOperationError) onOperationError("removeRelayer", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleEmergencyWithdraw = async () => {
+    if (!emergencyWithdrawAmount) {
+      setErrorMessage("Please enter a valid amount for emergency withdrawal.");
+      return;
+    }
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      if (onOperationSuccess) onOperationSuccess("emergencyWithdraw", { message: "Emergency withdraw (placeholder)" });
+      setEmergencyWithdrawAmount("");
+    } catch (error) {
+      console.error("Error during emergency withdrawal:", error);
+      setErrorMessage("Failed to perform emergency withdrawal. Please check console for details.");
+      if (onOperationError) onOperationError("emergencyWithdraw", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  return /* @__PURE__ */ jsxs("div", { className: `bg-white shadow-md rounded-lg p-6 ${className}`, children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-2xl font-bold mb-4", children: "Admin Contract Controls" }),
+    errorMessage && /* @__PURE__ */ jsx("div", { className: "bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4", children: errorMessage }),
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-xl font-semibold mb-2", children: "Contract State" }),
+        /* @__PURE__ */ jsxs("p", { className: "mb-2", children: [
+          "Current State: ",
+          /* @__PURE__ */ jsx("span", { className: isPaused ? "text-red-500" : "text-green-500", children: isPaused === null ? "Loading..." : isPaused ? "Paused" : "Active" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              onClick: handlePause,
+              disabled: isLoading || isPaused === true,
+              className: "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50",
+              children: "Pause"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              onClick: handleUnpause,
+              disabled: isLoading || isPaused === false,
+              className: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50",
+              children: "Unpause"
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-xl font-semibold mb-2", children: "Relayer Management" }),
+        /* @__PURE__ */ jsx(
+          "input",
+          {
+            type: "text",
+            value: relayerAddress,
+            onChange: (e) => setRelayerAddress(e.target.value),
+            placeholder: "Enter relayer address",
+            className: "border rounded p-2 w-full mb-2"
+          }
+        ),
+        /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              onClick: handleAddRelayer,
+              disabled: isLoading,
+              className: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50",
+              children: "Add Relayer"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              onClick: handleRemoveRelayer,
+              disabled: isLoading,
+              className: "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50",
+              children: "Remove Relayer"
+            }
+          )
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-xl font-semibold mb-2", children: "Emergency Operations" }),
+        /* @__PURE__ */ jsx(
+          "input",
+          {
+            type: "text",
+            value: emergencyWithdrawAmount,
+            onChange: (e) => setEmergencyWithdrawAmount(e.target.value),
+            placeholder: "Enter amount for emergency withdrawal",
+            className: "border rounded p-2 w-full mb-2"
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          "button",
+          {
+            onClick: handleEmergencyWithdraw,
+            disabled: isLoading,
+            className: "bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50",
+            children: "Emergency Withdraw"
+          }
+        )
+      ] })
+    ] })
+  ] });
+};
+var AdvancedStatsDashboard = ({
+  sdkConfig,
+  chainId,
+  onDataLoadError,
+  className = ""
+}) => {
+  const { sdk } = sdkConfig;
+  const [stats, setStats] = useState(null);
+  const [activeCreators, setActiveCreators] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    const fetchStats = async () => {
+      setIsLoading(true);
+      setErrorMessage("");
+      try {
+        setStats({ totalTips: 100, totalRewards: 50, totalValue: 1e4 });
+        setActiveCreators([{ id: 1, name: "Creator 1" }, { id: 2, name: "Creator 2" }]);
+      } catch (error) {
+        console.error("Error fetching advanced stats:", error);
+        setErrorMessage("Failed to load advanced statistics. Please check console for details.");
+        if (onDataLoadError) onDataLoadError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchStats();
+  }, [sdk, chainId, onDataLoadError]);
+  return /* @__PURE__ */ jsxs("div", { className: `bg-white shadow-md rounded-lg p-6 ${className}`, children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-2xl font-bold mb-4", children: "Advanced Statistics Dashboard" }),
+    errorMessage && /* @__PURE__ */ jsx("div", { className: "bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4", children: errorMessage }),
+    isLoading ? /* @__PURE__ */ jsx("div", { className: "text-center py-10", children: "Loading statistics..." }) : /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [
+      /* @__PURE__ */ jsxs("div", { className: "bg-blue-50 p-4 rounded-lg shadow", children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-lg font-semibold mb-2", children: "Total Tips" }),
+        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold", children: stats?.totalTips || 0 })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "bg-green-50 p-4 rounded-lg shadow", children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-lg font-semibold mb-2", children: "Total Rewards" }),
+        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold", children: stats?.totalRewards || 0 })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "bg-purple-50 p-4 rounded-lg shadow", children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-lg font-semibold mb-2", children: "Total Value (USDC)" }),
+        /* @__PURE__ */ jsxs("p", { className: "text-3xl font-bold", children: [
+          "$",
+          stats?.totalValue || 0
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "md:col-span-3", children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-xl font-semibold mb-2", children: "Active Creators" }),
+        /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "min-w-full bg-white border border-gray-200", children: [
+          /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-gray-100", children: [
+            /* @__PURE__ */ jsx("th", { className: "py-2 px-4 border-b text-left", children: "ID" }),
+            /* @__PURE__ */ jsx("th", { className: "py-2 px-4 border-b text-left", children: "Name" })
+          ] }) }),
+          /* @__PURE__ */ jsx("tbody", { children: activeCreators.length > 0 ? activeCreators.map((creator) => /* @__PURE__ */ jsxs("tr", { className: "hover:bg-gray-50", children: [
+            /* @__PURE__ */ jsx("td", { className: "py-2 px-4 border-b", children: creator.id }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 px-4 border-b", children: creator.name })
+          ] }, creator.id)) : /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 2, className: "py-2 px-4 text-center text-gray-500", children: "No active creators found." }) }) })
+        ] }) })
+      ] })
+    ] })
+  ] });
+};
 
 // src/index.ts
-var UI_VERSION = "2.3.0";
+var UI_VERSION = "2.5.0";
 var FEE_STRUCTURE = {
   PLATFORM_PERCENTAGE: 5,
   // Platform always takes 5% for tips
@@ -9043,6 +9388,6 @@ var FEE_STRUCTURE = {
   // Creator/business split depends on creator's membership tier (60/40, 70/30, 80/20, 90/10)
 };
 
-export { AdminDashboard, AdminInterface, AnalyticsDashboard, ApeChainTippingInterface, BatchViewerReward, Button, CHAIN_TOKENS, ChainSelector, CreatorAnalyticsDashboard, CreatorManagement, CreatorSelector, FEE_STRUCTURE, LiveBalanceDisplay, LocalTransactionHistoryService, MultiTokenBalanceDisplay, MultiTokenTippingInterface, NATIVE_TOKENS, NotificationProvider, NotificationToast, RelayProgressIndicator, RelayStatusBadge, RewardPoolInterface, StreamingPage, TransactionHistory, TransactionHistoryPage, TransactionStatusMessage, UI_VERSION, ViewerRewardInterface, ViewerRewardStats, ViewerRewardsPage, ViewerSelector, calculateFeeBreakdown, calculateViewerRewardFees, createTransactionHistoryService, debounce, findTokenBySymbol, formatTokenAmount, formatTokenAmount2 as formatTokenAmountFromConfig, getAllTokensForChain, getChainName, getChainNameFromId, getNativeCurrency, getNativeToken, getPopularTokens, getStablecoins, getTokenOptions, getTokensForChain, isNativeToken, isValidAddress, transactionBuilder, truncateAddress, useBalanceWatcher, useNotifications, useRelayProgress, useTransactionMonitor, useTransactionNotifications };
+export { AdminContractControls, AdminDashboard, AdminInterface, AdvancedStatsDashboard, AnalyticsDashboard, ApeChainTippingInterface, BatchViewerReward, Button, CHAIN_TOKENS, ChainSelector, CreatorAnalyticsDashboard, CreatorManagement, CreatorSelector, FEE_STRUCTURE, LiveBalanceDisplay, LocalTransactionHistoryService, MultiTokenBalanceDisplay, MultiTokenTippingInterface, NATIVE_TOKENS, NotificationProvider, NotificationToast, RelayProgressIndicator, RelayStatusBadge, RewardPoolInterface, StreamingPage, TransactionHistory, TransactionHistoryPage, TransactionStatusMessage, UI_VERSION, ViewerRewardInterface, ViewerRewardStats, ViewerRewardsPage, ViewerSelector, calculateFeeBreakdown, calculateViewerRewardFees, createTransactionHistoryService, debounce, findTokenBySymbol, formatTokenAmount, formatTokenAmount2 as formatTokenAmountFromConfig, getAllTokensForChain, getChainName, getChainNameFromId, getNativeCurrency, getNativeToken, getPopularTokens, getStablecoins, getTokenOptions, getTokensForChain, isNativeToken, isValidAddress, transactionBuilder, truncateAddress, useBalanceWatcher, useNotifications, useRelayProgress, useTransactionMonitor, useTransactionNotifications };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map
