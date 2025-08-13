@@ -61,8 +61,8 @@
     }
   },
   "dependencies": {
-    "@tippingchain/contracts-interface": "^1.3.0",
-    "@tippingchain/sdk": "^2.3.0",
+    "@tippingchain/contracts-interface": "^1.4.0",
+    "@tippingchain/sdk": "^2.4.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.263.1"
   },

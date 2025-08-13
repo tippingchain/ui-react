@@ -1,10 +1,10 @@
 # @tippingchain/ui-react
 
-React UI components for TippingChain v2.0 - a unified multi-chain tipping platform with integrated Relay.link bridging, creator registry, and viewer rewards. Beautiful, responsive components with dynamic tier-based fee structures and testnet support.
+React UI components for TippingChain v2.5 - a unified multi-chain tipping platform with integrated Relay.link bridging, creator registry, and viewer rewards. Beautiful, responsive components with dynamic tier-based fee structures and testnet support.
 
-## Version 2.0 Updates
+## Version 2.5 Updates
 
-- ✨ **Integrated Architecture**: Components work with v2.0 SDK and integrated Relay.link contracts
+- ✨ **Integrated Architecture**: Components work with v2.4 SDK and integrated Relay.link contracts
 - 🏗️ **Page-Level Components**: Complete page components (StreamingPage, AdminDashboard, AnalyticsDashboard, ViewerRewardsPage, TransactionHistoryPage)
 - 🔐 **Admin Role System**: CreatorManagement component supports multi-admin creator management
 - 🧪 **Testnet Support**: Holesky (Ethereum) and Amoy (Polygon) testnet compatibility
@@ -12,6 +12,8 @@ React UI components for TippingChain v2.0 - a unified multi-chain tipping platfo
 - 💰 **Accurate Fee Display**: 5% platform fee for tips, 1% for viewer rewards
 - 🎯 **Enhanced Viewer Rewards**: Batch rewards, pool distribution, improved UI/UX
 - 📦 **Dependency Alignment**: Examples package now heavily dependent on ui-react components (88% code reduction)
+- 🆕 **Advanced Admin Controls**: New `AdminContractControls` component for contract state management (pause/unpause), relayer management, and emergency operations
+- 📈 **Advanced Statistics**: New `AdvancedStatsDashboard` component to display detailed platform stats and active creators using SDK's advanced query methods
 
 ## Features
 
@@ -34,7 +36,7 @@ npm install @tippingchain/ui-react @tippingchain/sdk thirdweb
 
 ## Components
 
-### Page-Level Components (v2.0)
+### Page-Level Components (v2.5)
 
 Complete page components ready for production use in TippingChain applications.
 
@@ -245,6 +247,35 @@ import { CreatorManagement } from '@tippingchain/ui-react';
   chainId={137}
   onCreatorAdded={(creatorId) => console.log('Added:', creatorId)}
   // Component automatically detects if connected wallet has admin permissions
+/>
+```
+
+### AdminContractControls (New in v2.5)
+
+Component for advanced admin operations like pausing/unpausing contracts, managing relayers, and emergency withdrawals.
+
+```tsx
+import { AdminContractControls } from '@tippingchain/ui-react';
+
+<AdminContractControls
+  sdkConfig={{ client, sdk }}
+  chainId={137}
+  onOperationSuccess={(operation, result) => console.log(`${operation} successful:`, result)}
+  onOperationError={(operation, error) => console.error(`${operation} failed:`, error)}
+/>
+```
+
+### AdvancedStatsDashboard (New in v2.5)
+
+Component for displaying advanced platform statistics and active creator data.
+
+```tsx
+import { AdvancedStatsDashboard } from '@tippingchain/ui-react';
+
+<AdvancedStatsDashboard
+  sdkConfig={{ client, sdk }}
+  chainId={8453} // Base chain as example
+  onDataLoadError={(error) => console.error('Stats load error:', error)}
 />
 ```
 
@@ -501,6 +532,25 @@ export const TippingApp = () => {
 | `onCreatorAdded?` | `(creatorId) => void` | Callback when creator is added |
 | `className?` | `string` | Additional CSS classes |
 
+### AdminContractControls
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `sdkConfig` | `{ client, sdk }` | Thirdweb client and SDK instance |
+| `chainId` | `number` | Chain ID for contract operations |
+| `onOperationSuccess?` | `(operation: string, result: any) => void` | Callback for successful operations |
+| `onOperationError?` | `(operation: string, error: any) => void` | Callback for operation errors |
+| `className?` | `string` | Additional CSS classes |
+
+### AdvancedStatsDashboard
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `sdkConfig` | `{ client, sdk }` | Thirdweb client and SDK instance |
+| `chainId` | `number` | Chain ID for fetching statistics |
+| `onDataLoadError?` | `(error: any) => void` | Callback for data loading errors |
+| `className?` | `string` | Additional CSS classes |
+
 ## Styling
 
 Components use Tailwind CSS for styling. Make sure to include Tailwind in your project:
@@ -548,11 +598,11 @@ import '@tippingchain/ui-react/dist/styles.css';
 
 ## Architecture Benefits
 
-### Dependency Alignment (v2.0)
+### Dependency Alignment (v2.5)
 The page-level components enable a clean architecture where consuming applications become heavily dependent on ui-react:
 
-**Before v2.0**: Each application implemented UI logic separately
-**After v2.0**: Applications configure page components with minimal code
+**Before v2.5**: Each application implemented UI logic separately
+**After v2.5**: Applications configure page components with minimal code
 
 **Example Code Reduction**:
 ```typescript

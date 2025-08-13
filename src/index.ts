@@ -142,8 +142,12 @@ export { TransactionHistoryPage, type TransactionHistoryPageProps } from './comp
 // Common component exports
 export { ChainSelector, TransactionStatusMessage, Button } from './components/common';
 
+// New component exports for SDK 2.4.0 features
+export { AdminContractControls } from './components/AdminContractControls';
+export { AdvancedStatsDashboard } from './components/AdvancedStatsDashboard';
+
 // Constants  
-export const UI_VERSION = '2.3.0';
+export const UI_VERSION = '2.5.0';
 
 // NOTE: Fee structure is now dynamic based on creator tiers
 // Use CONTRACT_CONSTANTS from @tippingchain/contracts-interface for current values
