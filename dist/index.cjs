@@ -1905,16 +1905,12 @@ var MultiTokenTippingInterface = ({
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: `bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl shadow-lg p-6 max-w-md mx-auto ${className}`, children: [
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center mb-4", children: [
       /* @__PURE__ */ jsxRuntime.jsx(Target, { className: "w-6 h-6 text-blue-600 mr-2" }),
-      /* @__PURE__ */ jsxRuntime.jsx("h3", { className: "text-lg font-semibold text-gray-800", children: "Multi-Token Tip \u2192 ApeChain" })
+      /* @__PURE__ */ jsxRuntime.jsx("h3", { className: "text-lg font-semibold text-gray-800", children: "Multi-Token \u2192 ApeChain" })
     ] }),
-    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "bg-white rounded-lg p-4 mb-4 border", children: [
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-sm text-gray-600", children: "Tipping Creator" }),
-      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "font-medium text-gray-800", children: [
-        "ID #",
-        creatorId
-      ] }),
-      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "text-xs text-gray-500", children: "Wallet recovery supported" })
-    ] }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "bg-white rounded-lg p-4 mb-4 border", children: /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "font-medium text-gray-800", children: [
+      "Creator ID #",
+      creatorId
+    ] }) }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "space-y-4", children: [
       /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
         /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex items-center justify-between mb-2", children: [
@@ -2205,34 +2201,7 @@ var MultiTokenTippingInterface = ({
             "Processing..."
           ] }) : `Send ${selectedToken?.symbol || ""} Tip \u2192 ApeChain`
         }
-      ),
-      /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "text-xs text-gray-600 bg-white p-3 rounded border", children: [
-        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "font-medium mb-1", children: "\u{1F4A1} How it works:" }),
-        /* @__PURE__ */ jsxRuntime.jsxs("ul", { className: "space-y-1", children: [
-          /* @__PURE__ */ jsxRuntime.jsxs("li", { children: [
-            "\u2022 Your ",
-            selectedToken?.symbol,
-            " is automatically bridged via Relay.link"
-          ] }),
-          /* @__PURE__ */ jsxRuntime.jsx("li", { children: "\u2022 Converted to stable USDC on ApeChain" }),
-          /* @__PURE__ */ jsxRuntime.jsx("li", { children: "\u2022 Creator receives funds in their wallet" }),
-          /* @__PURE__ */ jsxRuntime.jsxs("li", { children: [
-            "\u2022 ",
-            selectedToken?.address ? "Token approval required first" : "Native token - no approval needed"
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntime.jsx("div", { className: "mt-2 pt-2 border-t", children: /* @__PURE__ */ jsxRuntime.jsxs(
-          "a",
-          {
-            href: "#",
-            className: "text-blue-600 hover:text-blue-700 text-xs flex items-center",
-            children: [
-              /* @__PURE__ */ jsxRuntime.jsx(ExternalLink, { className: "w-3 h-3 mr-1" }),
-              "Learn more about cross-chain tipping"
-            ]
-          }
-        ) })
-      ] })
+      )
     ] })
   ] });
 };
