@@ -74,10 +74,6 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
   
   const chainTokens = activeChain ? getAllTokensForChain(activeChain.id) : [];
   
-  // DEBUG: Log what tokens are being loaded
-  if (activeChain) {
-    console.log(`[URGENT DEBUG] Chain ${activeChain.id} tokens from getAllTokensForChain:`, JSON.stringify(chainTokens, null, 2));
-  }
 
   // Load all token balances for the current chain
   const loadTokenBalances = async (showNotification = false) => {
@@ -90,13 +86,7 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
     try {
       // Get token addresses for balance checking
       const tokenAddresses = chainTokens.map(token => token.address || 'native');
-      
-      // DEBUG: Log what we're actually passing to SDK
-      console.log(`[URGENT DEBUG] Calling getMultipleTokenBalances with:`);
-      console.log(`  walletAddress: ${account.address}`);
-      console.log(`  tokenAddresses:`, tokenAddresses);
-      console.log(`  chainId: ${activeChain.id}`);
-      
+            
       // Load all balances in parallel using the new SDK method
       const balances = await sdk.getMultipleTokenBalances(account.address, tokenAddresses, activeChain.id);
       
@@ -369,12 +359,13 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
     });
     
     try {
-      // Prepare tip parameters
+      // Prepare tip parameters - convert amount to wei
+      const amountInWei = (parseFloat(amount) * Math.pow(10, selectedToken.decimals || 18)).toString();
       const tipParams: TipParams = {
         sourceChainId: activeChain.id,
         creatorId: creatorId,
         token: selectedToken.address || 'native', // 'native' for ETH/native tokens
-        amount: amount // Amount in token units (e.g., "1.5" for 1.5 ETH)
+        amount: amountInWei // Amount in wei for contract compatibility
       };
       
       // Send the tip via SDK
@@ -443,15 +434,13 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
       <div className="flex items-center mb-4">
         <Target className="w-6 h-6 text-blue-600 mr-2" />
         <h3 className="text-lg font-semibold text-gray-800">
-          Multi-Token Tip → ApeChain
+          Multi-Token → ApeChain
         </h3>
       </div>
 
       {/* Creator Info */}
       <div className="bg-white rounded-lg p-4 mb-4 border">
-        <div className="text-sm text-gray-600">Tipping Creator</div>
-        <div className="font-medium text-gray-800">ID #{creatorId}</div>
-        <div className="text-xs text-gray-500">Wallet recovery supported</div>
+        <div className="font-medium text-gray-800">Creator ID #{creatorId}</div>
       </div>
 
       {/* Token Selection */}
@@ -866,26 +855,6 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
             `Send ${selectedToken?.symbol || ''} Tip → ApeChain`
           )}
         </button>
-
-        {/* Info */}
-        <div className="text-xs text-gray-600 bg-white p-3 rounded border">
-          <div className="font-medium mb-1">💡 How it works:</div>
-          <ul className="space-y-1">
-            <li>• Your {selectedToken?.symbol} is automatically bridged via Relay.link</li>
-            <li>• Converted to stable USDC on ApeChain</li>
-            <li>• Creator receives funds in their wallet</li>
-            <li>• {selectedToken?.address ? 'Token approval required first' : 'Native token - no approval needed'}</li>
-          </ul>
-          <div className="mt-2 pt-2 border-t">
-            <a 
-              href="#" 
-              className="text-blue-600 hover:text-blue-700 text-xs flex items-center"
-            >
-              <ExternalLink className="w-3 h-3 mr-1" />
-              Learn more about cross-chain tipping
-            </a>
-          </div>
-        </div>
       </div>
     </div>
   );
