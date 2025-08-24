@@ -1106,7 +1106,8 @@ var CHAIN_TOKENS = [
     chainName: "Ethereum Holesky",
     native: NATIVE_TOKENS[17e3],
     tokens: [
-      { symbol: "USDC", name: "USD Coin (Test)", decimals: 6, address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F", icon: "\u{1F9EA}", color: "#2775CA", isStable: true }
+      // USDC token on Holesky testnet - verified address
+      { symbol: "USDC", name: "USD Coin (Holesky)", decimals: 6, address: "0x57978Bfe465ad9B1c0bf80f6C1539d300705EA50", icon: "\u{1F4B5}", color: "#2775CA", isStable: true, popular: true }
     ]
   },
   {
@@ -1124,7 +1125,10 @@ var CHAIN_TOKENS = [
     chainName: "ApeChain Curtis",
     native: NATIVE_TOKENS[33111],
     tokens: [
-      { symbol: "USDC", name: "USD Coin (Test)", decimals: 6, address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e", icon: "\u{1F9EA}", color: "#2775CA", isStable: true }
+      // USDC token on Curtis testnet - verified address
+      { symbol: "USDC", name: "USD Coin (Curtis)", decimals: 6, address: "0xE0356B8aD7811dC3e4d61cFD6ac7653e0D31b096", icon: "\u{1F4B5}", color: "#2775CA", isStable: true, popular: true },
+      // ApeCoin ERC-20 token on Curtis testnet
+      { symbol: "APE", name: "ApeCoin (Curtis)", decimals: 18, address: "0xE0C1FBc6655e15eB5D6cED91a002694df4024c3F", icon: "\u{1F412}", color: "#FFD700", popular: true }
     ]
   }
 ];
@@ -1621,6 +1625,9 @@ var MultiTokenTippingInterface = ({
   const [usdAmount, setUsdAmount] = useState("");
   const [tokenPrice, setTokenPrice] = useState(0);
   const chainTokens = activeChain ? getAllTokensForChain(activeChain.id) : [];
+  if (activeChain) {
+    console.log(`[URGENT DEBUG] Chain ${activeChain.id} tokens from getAllTokensForChain:`, JSON.stringify(chainTokens, null, 2));
+  }
   const loadTokenBalances = async (showNotification = false) => {
     if (!account?.address || !activeChain || chainTokens.length === 0) {
       setTokenBalances({});
@@ -1629,6 +1636,10 @@ var MultiTokenTippingInterface = ({
     setLoadingBalance(true);
     try {
       const tokenAddresses = chainTokens.map((token) => token.address || "native");
+      console.log(`[URGENT DEBUG] Calling getMultipleTokenBalances with:`);
+      console.log(`  walletAddress: ${account.address}`);
+      console.log(`  tokenAddresses:`, tokenAddresses);
+      console.log(`  chainId: ${activeChain.id}`);
       const balances = await sdk.getMultipleTokenBalances(account.address, tokenAddresses, activeChain.id);
       const balancesBySymbol = {};
       chainTokens.forEach((token, index) => {

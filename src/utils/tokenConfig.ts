@@ -152,7 +152,8 @@ export const CHAIN_TOKENS: ChainTokens[] = [
     chainName: 'Ethereum Holesky',
     native: NATIVE_TOKENS[17000],
     tokens: [
-      { symbol: 'USDC', name: 'USD Coin (Test)', decimals: 6, address: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F', icon: '🧪', color: '#2775CA', isStable: true },
+      // USDC token on Holesky testnet - verified address
+      { symbol: 'USDC', name: 'USD Coin (Holesky)', decimals: 6, address: '0x57978Bfe465ad9B1c0bf80f6C1539d300705EA50', icon: '💵', color: '#2775CA', isStable: true, popular: true },
     ]
   },
   {
@@ -168,7 +169,11 @@ export const CHAIN_TOKENS: ChainTokens[] = [
     chainName: 'ApeChain Curtis',
     native: NATIVE_TOKENS[33111],
     tokens: [
-      { symbol: 'USDC', name: 'USD Coin (Test)', decimals: 6, address: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', icon: '🧪', color: '#2775CA', isStable: true },
+      // USDC token on Curtis testnet - verified address
+      { symbol: 'USDC', name: 'USD Coin (Curtis)', decimals: 6, address: '0xE0356B8aD7811dC3e4d61cFD6ac7653e0D31b096', icon: '💵', color: '#2775CA', isStable: true, popular: true },
+      
+      // ApeCoin ERC-20 token on Curtis testnet
+      { symbol: 'APE', name: 'ApeCoin (Curtis)', decimals: 18, address: '0xE0C1FBc6655e15eB5D6cED91a002694df4024c3F', icon: '🐒', color: '#FFD700', popular: true },
     ]
   },
 ];

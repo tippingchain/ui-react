@@ -73,6 +73,11 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
   const [tokenPrice, setTokenPrice] = useState<number>(0);
   
   const chainTokens = activeChain ? getAllTokensForChain(activeChain.id) : [];
+  
+  // DEBUG: Log what tokens are being loaded
+  if (activeChain) {
+    console.log(`[URGENT DEBUG] Chain ${activeChain.id} tokens from getAllTokensForChain:`, JSON.stringify(chainTokens, null, 2));
+  }
 
   // Load all token balances for the current chain
   const loadTokenBalances = async (showNotification = false) => {
@@ -85,6 +90,12 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
     try {
       // Get token addresses for balance checking
       const tokenAddresses = chainTokens.map(token => token.address || 'native');
+      
+      // DEBUG: Log what we're actually passing to SDK
+      console.log(`[URGENT DEBUG] Calling getMultipleTokenBalances with:`);
+      console.log(`  walletAddress: ${account.address}`);
+      console.log(`  tokenAddresses:`, tokenAddresses);
+      console.log(`  chainId: ${activeChain.id}`);
       
       // Load all balances in parallel using the new SDK method
       const balances = await sdk.getMultipleTokenBalances(account.address, tokenAddresses, activeChain.id);
