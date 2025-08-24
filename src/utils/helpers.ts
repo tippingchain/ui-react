@@ -204,12 +204,15 @@ export function getTokenOptions(chainId: number) {
     // Testnet chains
     17000: [ // Ethereum Holesky
       { symbol: 'ETH', name: 'Ethereum', decimals: 18 },
+      { symbol: 'USDC', name: 'USD Coin (Holesky)', address: '0x57978Bfe465ad9B1c0bf80f6C1539d300705EA50', decimals: 6 },
     ],
     80002: [ // Polygon Amoy
       { symbol: 'MATIC', name: 'Polygon', decimals: 18 },
+      { symbol: 'USDC', name: 'USD Coin (Test)', address: '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582', decimals: 6 },
     ],
     33111: [ // ApeChain Curtis
       { symbol: 'APE', name: 'ApeCoin', decimals: 18 },
+      { symbol: 'USDC', name: 'USD Coin (Curtis)', address: '0xE0356B8aD7811dC3e4d61cFD6ac7653e0D31b096', decimals: 6 },
     ],
   };
 

@@ -171,9 +171,6 @@ export const CHAIN_TOKENS: ChainTokens[] = [
     tokens: [
       // USDC token on Curtis testnet - verified address
       { symbol: 'USDC', name: 'USD Coin (Curtis)', decimals: 6, address: '0xE0356B8aD7811dC3e4d61cFD6ac7653e0D31b096', icon: '💵', color: '#2775CA', isStable: true, popular: true },
-      
-      // ApeCoin ERC-20 token on Curtis testnet
-      { symbol: 'APE', name: 'ApeCoin (Curtis)', decimals: 18, address: '0xE0C1FBc6655e15eB5D6cED91a002694df4024c3F', icon: '🐒', color: '#FFD700', popular: true },
     ]
   },
 ];

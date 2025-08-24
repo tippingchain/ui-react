@@ -147,7 +147,7 @@ export { AdminContractControls } from './components/AdminContractControls';
 export { AdvancedStatsDashboard } from './components/AdvancedStatsDashboard';
 
 // Constants  
-export const UI_VERSION = '2.5.0';
+export const UI_VERSION = '2.7.0';
 
 // NOTE: Fee structure is now dynamic based on creator tiers
 // Use CONTRACT_CONSTANTS from @tippingchain/contracts-interface for current values

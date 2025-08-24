@@ -198,13 +198,22 @@ export class LocalTransactionHistoryService implements TransactionHistoryStorage
   }
 }
 
+// Default destination chain - use environment or fallback to mainnet
+const getDestinationChainId = (): number => {
+  // In testnet environments, use Curtis (33111), otherwise mainnet ApeChain (33139)
+  if (typeof window !== 'undefined' && window.location?.hostname?.includes('testnet')) {
+    return 33111; // Curtis testnet
+  }
+  return 33139; // ApeChain mainnet
+};
+
 // Transaction builder utility functions
 export const transactionBuilder: TransactionBuilder = {
   createTipTransaction: (params) => ({
     type: 'tip',
     status: 'pending',
     sourceChainId: params.sourceChainId,
-    destinationChainId: 33139, // ApeChain
+    destinationChainId: params.destinationChainId || getDestinationChainId(),
     tokenSymbol: params.tokenSymbol,
     tokenAddress: params.tokenAddress,
     amount: params.amount,

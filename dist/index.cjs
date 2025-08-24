@@ -713,15 +713,19 @@ function getTokenOptions(chainId) {
     // Testnet chains
     17e3: [
       // Ethereum Holesky
-      { symbol: "ETH", name: "Ethereum", decimals: 18 }
+      { symbol: "ETH", name: "Ethereum", decimals: 18 },
+      { symbol: "USDC", name: "USD Coin (Holesky)", address: "0x57978Bfe465ad9B1c0bf80f6C1539d300705EA50", decimals: 6 }
     ],
     80002: [
       // Polygon Amoy
-      { symbol: "MATIC", name: "Polygon", decimals: 18 }
+      { symbol: "MATIC", name: "Polygon", decimals: 18 },
+      { symbol: "USDC", name: "USD Coin (Test)", address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582", decimals: 6 }
     ],
     33111: [
       // ApeChain Curtis
-      { symbol: "APE", name: "ApeCoin", decimals: 18 }
+      { symbol: "APE", name: "ApeCoin", decimals: 18 },
+      { symbol: "USDC", name: "USD Coin (Curtis)", address: "0xE0356B8aD7811dC3e4d61cFD6ac7653e0D31b096", decimals: 6 },
+      { symbol: "APE", name: "ApeCoin (ERC-20)", address: "0xE0C1FBc6655e15eB5D6cED91a002694df4024c3F", decimals: 18 }
     ]
   };
   return commonTokens[chainId] || [
@@ -4440,13 +4444,18 @@ var LocalTransactionHistoryService = class {
     };
   }
 };
+var getDestinationChainId = () => {
+  if (typeof window !== "undefined" && window.location?.hostname?.includes("testnet")) {
+    return 33111;
+  }
+  return 33139;
+};
 var transactionBuilder = {
   createTipTransaction: (params) => ({
     type: "tip",
     status: "pending",
     sourceChainId: params.sourceChainId,
-    destinationChainId: 33139,
-    // ApeChain
+    destinationChainId: params.destinationChainId || getDestinationChainId(),
     tokenSymbol: params.tokenSymbol,
     tokenAddress: params.tokenAddress,
     amount: params.amount,
@@ -9396,7 +9405,7 @@ var AdvancedStatsDashboard = ({
 };
 
 // src/index.ts
-var UI_VERSION = "2.5.0";
+var UI_VERSION = "2.7.0";
 var FEE_STRUCTURE = {
   PLATFORM_PERCENTAGE: 5,
   // Platform always takes 5% for tips
