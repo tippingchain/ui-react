@@ -1,6 +1,6 @@
 {
   "name": "@tippingchain/ui-react",
-  "version": "2.6.3",
+  "version": "2.7.0",
   "type": "module",
   "description": "TippingChain UI - React components",
   "main": "./dist/index.js",
@@ -61,8 +61,8 @@
     }
   },
   "dependencies": {
-    "@tippingchain/contracts-interface": "^1.5.3",
-    "@tippingchain/sdk": "^2.5.4",
+    "@tippingchain/contracts-interface": "^1.6.0",
+    "@tippingchain/sdk": "^2.6.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.263.1"
   },
