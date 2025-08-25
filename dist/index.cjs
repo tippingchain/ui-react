@@ -988,9 +988,9 @@ var NATIVE_TOKENS = {
   167e3: { symbol: "ETH", name: "Ethereum (Taiko)", decimals: 18, icon: "\u{1F38C}", color: "#FA4F00" },
   33139: { symbol: "APE", name: "ApeChain", decimals: 18, icon: "\u{1F412}", color: "#FFD700" },
   // Testnets
-  17e3: { symbol: "ETH", name: "Ethereum (Holesky)", decimals: 18, icon: "\u{1F9EA}", color: "#627EEA" },
   80002: { symbol: "MATIC", name: "Polygon (Amoy)", decimals: 18, icon: "\u{1F9EA}", color: "#8247E5" },
-  33111: { symbol: "APE", name: "ApeChain (Curtis)", decimals: 18, icon: "\u{1F9EA}", color: "#FFD700" }
+  421614: { symbol: "ETH", name: "Ethereum (Arbitrum Sepolia)", decimals: 18, icon: "\u{1F9EA}", color: "#28A0F0" },
+  84532: { symbol: "ETH", name: "Ethereum (Base Sepolia)", decimals: 18, icon: "\u{1F9EA}", color: "#0052FF" }
 };
 var CHAIN_TOKENS = [
   {
@@ -1110,16 +1110,6 @@ var CHAIN_TOKENS = [
   },
   // Testnets
   {
-    chainId: 17e3,
-    // Holesky (Ethereum testnet)
-    chainName: "Ethereum Holesky",
-    native: NATIVE_TOKENS[17e3],
-    tokens: [
-      // USDC token on Holesky testnet - verified address
-      { symbol: "USDC", name: "USD Coin (Holesky)", decimals: 6, address: "0x57978Bfe465ad9B1c0bf80f6C1539d300705EA50", icon: "\u{1F4B5}", color: "#2775CA", isStable: true, popular: true }
-    ]
-  },
-  {
     chainId: 80002,
     // Amoy (Polygon testnet)
     chainName: "Polygon Amoy",
@@ -1129,13 +1119,21 @@ var CHAIN_TOKENS = [
     ]
   },
   {
-    chainId: 33111,
-    // Curtis (ApeChain testnet)
-    chainName: "ApeChain Curtis",
-    native: NATIVE_TOKENS[33111],
+    chainId: 421614,
+    // Arbitrum Sepolia (testnet)
+    chainName: "Arbitrum Sepolia",
+    native: NATIVE_TOKENS[421614],
     tokens: [
-      // USDC token on Curtis testnet - verified address
-      { symbol: "USDC", name: "USD Coin (Curtis)", decimals: 6, address: "0xE0356B8aD7811dC3e4d61cFD6ac7653e0D31b096", icon: "\u{1F4B5}", color: "#2775CA", isStable: true, popular: true }
+      { symbol: "USDC", name: "USD Coin (Arbitrum Sepolia)", decimals: 6, address: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d", icon: "\u{1F4B5}", color: "#2775CA", isStable: true, popular: true }
+    ]
+  },
+  {
+    chainId: 84532,
+    // Base Sepolia (testnet destination)
+    chainName: "Base Sepolia",
+    native: NATIVE_TOKENS[84532],
+    tokens: [
+      { symbol: "USDC", name: "USD Coin (Base Sepolia)", decimals: 6, address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e", icon: "\u{1F4B5}", color: "#2775CA", isStable: true, popular: true }
     ]
   }
 ];
