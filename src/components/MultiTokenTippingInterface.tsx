@@ -464,7 +464,8 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
           </div>
           <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
             {chainTokens.map((token) => {
-              const balance = tokenBalances[token.symbol] || '0';
+              const rawBalance = tokenBalances[token.symbol] || '0';
+              const balance = parseFloat(rawBalance) / Math.pow(10, token.decimals);
               const isSelected = selectedToken?.symbol === token.symbol;
               
               return (
@@ -492,7 +493,7 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
                     {loadingBalance ? (
                       <span className="animate-pulse">Loading...</span>
                     ) : (
-                      formatTokenAmount(balance, token.decimals)
+                      formatTokenAmount(balance.toString(), token.decimals)
                     )}
                   </div>
                   {token.isStable && (

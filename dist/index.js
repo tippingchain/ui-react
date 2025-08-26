@@ -1922,7 +1922,8 @@ var MultiTokenTippingInterface = ({
           )
         ] }),
         /* @__PURE__ */ jsx("div", { className: "grid grid-cols-2 gap-2 max-h-40 overflow-y-auto", children: chainTokens.map((token) => {
-          const balance = tokenBalances[token.symbol] || "0";
+          const rawBalance = tokenBalances[token.symbol] || "0";
+          const balance = parseFloat(rawBalance) / Math.pow(10, token.decimals);
           const isSelected = selectedToken?.symbol === token.symbol;
           return /* @__PURE__ */ jsxs(
             "button",
@@ -1942,7 +1943,7 @@ var MultiTokenTippingInterface = ({
                 ] }),
                 /* @__PURE__ */ jsxs("div", { className: "text-xs text-gray-600 mt-1", children: [
                   /* @__PURE__ */ jsx(Wallet, { className: "w-3 h-3 inline mr-1" }),
-                  loadingBalance ? /* @__PURE__ */ jsx("span", { className: "animate-pulse", children: "Loading..." }) : formatTokenAmount2(balance, token.decimals)
+                  loadingBalance ? /* @__PURE__ */ jsx("span", { className: "animate-pulse", children: "Loading..." }) : formatTokenAmount2(balance.toString(), token.decimals)
                 ] }),
                 token.isStable && /* @__PURE__ */ jsx("div", { className: "text-xs text-green-600 font-medium mt-1", children: "Stablecoin" }),
                 token.popular && /* @__PURE__ */ jsx("div", { className: "text-xs text-orange-600 font-medium mt-1", children: "Popular" })
