@@ -31,9 +31,9 @@ export function getChainName(chainId: number): string {
     167000: { id: 167000, name: 'Taiko', nativeCurrency: 'ETH' },
     33139: { id: 33139, name: 'ApeChain', nativeCurrency: 'APE' },
     // Testnet chains
-    17000: { id: 17000, name: 'Ethereum Holesky', nativeCurrency: 'ETH' },
+    421614: { id: 421614, name: 'Arbitrum Sepolia', nativeCurrency: 'ETH' },
     80002: { id: 80002, name: 'Polygon Amoy', nativeCurrency: 'MATIC' },
-    33111: { id: 33111, name: 'ApeChain Curtis', nativeCurrency: 'APE' },
+    84532: { id: 84532, name: 'Base Sepolia', nativeCurrency: 'ETH' },
   };
   
   return chainMap[chainId]?.name || 'Unknown';
@@ -56,9 +56,9 @@ export function getNativeCurrency(chainId: number): string {
     167000: { id: 167000, name: 'Taiko', nativeCurrency: 'ETH' },
     33139: { id: 33139, name: 'ApeChain', nativeCurrency: 'APE' },
     // Testnet chains  
-    17000: { id: 17000, name: 'Ethereum Holesky', nativeCurrency: 'ETH' },
+    421614: { id: 421614, name: 'Arbitrum Sepolia', nativeCurrency: 'ETH' },
     80002: { id: 80002, name: 'Polygon Amoy', nativeCurrency: 'MATIC' },
-    33111: { id: 33111, name: 'ApeChain Curtis', nativeCurrency: 'APE' },
+    84532: { id: 84532, name: 'Base Sepolia', nativeCurrency: 'ETH' },
   };
   
   return chainMap[chainId]?.nativeCurrency || 'TOKEN';
@@ -202,17 +202,17 @@ export function getTokenOptions(chainId: number) {
       { symbol: 'USDC', name: 'USD Coin', address: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359', decimals: 6 },
     ],
     // Testnet chains
-    17000: [ // Ethereum Holesky
+    421614: [ // Arbitrum Sepolia
       { symbol: 'ETH', name: 'Ethereum', decimals: 18 },
-      { symbol: 'USDC', name: 'USD Coin (Holesky)', address: '0x57978Bfe465ad9B1c0bf80f6C1539d300705EA50', decimals: 6 },
+      { symbol: 'USDC', name: 'USD Coin (Arbitrum Sepolia)', address: '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d', decimals: 6 },
     ],
     80002: [ // Polygon Amoy
       { symbol: 'MATIC', name: 'Polygon', decimals: 18 },
       { symbol: 'USDC', name: 'USD Coin (Test)', address: '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582', decimals: 6 },
     ],
-    33111: [ // ApeChain Curtis
-      { symbol: 'APE', name: 'ApeCoin', decimals: 18 },
-      { symbol: 'USDC', name: 'USD Coin (Curtis)', address: '0xE0356B8aD7811dC3e4d61cFD6ac7653e0D31b096', decimals: 6 },
+    84532: [ // Base Sepolia
+      { symbol: 'ETH', name: 'Ethereum', decimals: 18 },
+      { symbol: 'USDC', name: 'USD Coin (Base Sepolia)', address: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', decimals: 6 },
     ],
   };
 

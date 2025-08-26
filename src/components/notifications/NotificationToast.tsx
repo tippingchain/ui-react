@@ -25,9 +25,9 @@ const CHAIN_EXPLORERS: ChainExplorerUrls = {
   2741: { name: 'Abstract Explorer', baseUrl: 'https://explorer.abstract.xyz', txPath: '/tx/' },
   33139: { name: 'ApeChain Explorer', baseUrl: 'https://apescan.io', txPath: '/tx/' },
   // Testnets
-  17000: { name: 'Holesky Etherscan', baseUrl: 'https://holesky.etherscan.io', txPath: '/tx/' },
+  421614: { name: 'Arbitrum Sepolia', baseUrl: 'https://sepolia.arbiscan.io', txPath: '/tx/' },
   80002: { name: 'Amoy PolygonScan', baseUrl: 'https://amoy.polygonscan.com', txPath: '/tx/' },
-  33111: { name: 'Curtis ApeChain', baseUrl: 'https://curtis.explorer.caldera.xyz', txPath: '/tx/' },
+  84532: { name: 'Base Sepolia', baseUrl: 'https://sepolia.basescan.org', txPath: '/tx/' },
 };
 
 export const NotificationToast: React.FC<NotificationToastProps> = ({

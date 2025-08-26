@@ -72,9 +72,9 @@ export const RelayProgressIndicator: React.FC<RelayProgressIndicatorProps> = ({
       2741: 'Abstract',
       33139: 'ApeChain',
       // Testnets
-      17000: 'Holesky',
+      421614: 'Arbitrum Sepolia',
       80002: 'Amoy',
-      33111: 'Curtis'
+      84532: 'Base Sepolia'
     };
     
     return chainMap[chainId] || `Chain ${chainId}`;
@@ -94,9 +94,9 @@ export const RelayProgressIndicator: React.FC<RelayProgressIndicatorProps> = ({
       2741: 'https://explorer.abstract.xyz/tx/',
       33139: 'https://apechain.calderaexplorer.xyz/tx/',
       // Testnets
-      17000: 'https://holesky.etherscan.io/tx/',
+      421614: 'https://sepolia.arbiscan.io/tx/',
       80002: 'https://amoy.polygonscan.com/tx/',
-      33111: 'https://curtis.explorer.caldera.xyz/tx/'
+      84532: 'https://sepolia.basescan.org/tx/'
     };
     
     return `${explorerMap[chainId] || '#'}${txHash}`;

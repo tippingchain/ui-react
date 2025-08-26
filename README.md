@@ -1,19 +1,19 @@
 # @tippingchain/ui-react
 
-React UI components for TippingChain v2.5 - a unified multi-chain tipping platform with integrated Relay.link bridging, creator registry, and viewer rewards. Beautiful, responsive components with dynamic tier-based fee structures and testnet support.
+React UI components for TippingChain v2.6 - a unified multi-chain tipping platform with integrated Relay.link bridging, creator registry, and viewer rewards. Beautiful, responsive components with dynamic tier-based fee structures and comprehensive testnet support.
 
-## Version 2.5 Updates
+## Version 2.6 Updates
 
-- ✨ **Integrated Architecture**: Components work with v2.4 SDK and integrated Relay.link contracts
-- 🏗️ **Page-Level Components**: Complete page components (StreamingPage, AdminDashboard, AnalyticsDashboard, ViewerRewardsPage, TransactionHistoryPage)
-- 🔐 **Admin Role System**: CreatorManagement component supports multi-admin creator management
-- 🧪 **Testnet Support**: Holesky (Ethereum) and Amoy (Polygon) testnet compatibility
-- 📊 **Dynamic Fees**: Components now show tier-based creator/business splits (60/40, 70/30, 80/20, 90/10)
-- 💰 **Accurate Fee Display**: 5% platform fee for tips, 1% for viewer rewards
-- 🎯 **Enhanced Viewer Rewards**: Batch rewards, pool distribution, improved UI/UX
-- 📦 **Dependency Alignment**: Examples package now heavily dependent on ui-react components (88% code reduction)
-- 🆕 **Advanced Admin Controls**: New `AdminContractControls` component for contract state management (pause/unpause), relayer management, and emergency operations
-- 📈 **Advanced Statistics**: New `AdvancedStatsDashboard` component to display detailed platform stats and active creators using SDK's advanced query methods
+- ✨ **Updated Testnet Support**: Migrated from deprecated Holesky/Curtis to Arbitrum Sepolia (421614) and Base Sepolia (84532)
+- 🌐 **Enhanced Chain Support**: Updated chain configurations and explorer URLs for all testnet components
+- 🔧 **Improved Notifications**: Updated NotificationToast with correct testnet explorer links and chain names
+- 📊 **Updated Fee Display**: All components show accurate 5% platform fee for tips, 1% for viewer rewards with tier-based splits
+- 🧪 **Production-Ready Testnet**: Full end-to-end testnet flow with real cross-chain bridging Arbitrum Sepolia → Base Sepolia
+- 📦 **SDK Alignment**: Compatible with @tippingchain/sdk v2.6.0 and contracts-interface v1.6.0
+- 🎯 **Enhanced RelayProgressIndicator**: Updated with current testnet chain support and explorer URLs
+- 💰 **Updated Token Configurations**: Current testnet token addresses for USDC on Arbitrum Sepolia and Base Sepolia
+- 🔗 **Improved Chain Helpers**: Updated getChainName and getNativeCurrency functions with current testnet chains
+- 📱 **Transaction History**: Enhanced TransactionHistoryService with proper testnet chain support
 
 ## Features
 
@@ -36,7 +36,7 @@ npm install @tippingchain/ui-react @tippingchain/sdk thirdweb
 
 ## Components
 
-### Page-Level Components (v2.5)
+### Page-Level Components (v2.6)
 
 Complete page components ready for production use in TippingChain applications.
 
@@ -51,7 +51,7 @@ import { StreamingPage } from '@tippingchain/ui-react';
   client={client}
   sdk={sdk}
   creatorId={1}
-  creatorWallet="0x479945d7931baC3343967bD0f839f8691E54a66e"
+  creatorWallet="0x479945d7931baC3343967bD0f839f8691E54a66e" // Demo creator on testnet
   creatorName="Creator Name"
   streamTitle="🔴 Live Stream"
   streamDescription="Watch and tip your favorite creator"
@@ -73,7 +73,7 @@ import { AdminDashboard } from '@tippingchain/ui-react';
 <AdminDashboard
   client={client}
   sdk={sdk}
-  defaultChainId={8453}
+  defaultChainId={421614} // Arbitrum Sepolia for testnet
   enablePlatformStats={true}
   enableCreatorAnalytics={true}
   adminAddresses={['0xadmin1', '0xadmin2']}
@@ -113,7 +113,7 @@ import { ViewerRewardsPage } from '@tippingchain/ui-react';
 <ViewerRewardsPage
   client={client}
   sdk={sdk}
-  demoCreatorWallet="0x479945d7931baC3343967bD0f839f8691E54a66e"
+  demoCreatorWallet="0x479945d7931baC3343967bD0f839f8691E54a66e" // Testnet demo creator
   defaultAllocationAmount={100}
   maxViewersPerBatch={50}
   enableBatchRewards={true}
@@ -293,7 +293,8 @@ const client = createThirdwebClient({
 
 const sdk = new ApeChainTippingSDK({
   clientId: "your-thirdweb-client-id",
-  environment: "production",
+  environment: "development", // Use "development" for testnet
+  useTestnet: true, // Enable testnet mode
   // Contract addresses are automatically loaded from @tippingchain/contracts-interface
 });
 
@@ -329,7 +330,7 @@ export const TippingApp = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <CreatorSelector
             sdkConfig={sdkConfig}
-            chainId={137}
+            chainId={421614} // Arbitrum Sepolia testnet
             onCreatorSelect={setSelectedCreator}
           />
           
@@ -360,7 +361,7 @@ export const TippingApp = () => {
       {/* Admin Panel */}
       <CreatorManagement
         sdkConfig={sdkConfig}
-        chainId={137}
+        chainId={421614} // Arbitrum Sepolia testnet
       />
     </div>
   );
@@ -567,7 +568,9 @@ import '@tippingchain/ui-react/dist/styles.css';
 
 ## Supported Chains
 
-### Source Chains
+### Mainnet Chains
+
+**Source Chains (9 networks):**
 - Ethereum (1) - ETH
 - Polygon (137) - MATIC
 - Optimism (10) - ETH
@@ -578,8 +581,26 @@ import '@tippingchain/ui-react/dist/styles.css';
 - Arbitrum (42161) - ETH
 - Taiko (167000) - ETH
 
-### Destination Chain
+**Destination Chain:**
 - ApeChain (33139) - APE - Where USDC payouts occur
+
+### Testnet Chains
+
+**Active Testnet Configuration:**
+- **Arbitrum Sepolia** (421614) - Source chain for testing tips
+  - RPC: https://sepolia-rollup.arbitrum.io/rpc
+  - Explorer: https://sepolia.arbiscan.io
+  - Faucet: https://faucet.quicknode.com/arbitrum/sepolia
+  - Contract: `0x2b50C16877a3E262e0D5B9a4B9f7517634Ba27d8`
+
+- **Base Sepolia** (84532) - Destination chain for USDC payouts
+  - RPC: https://sepolia.base.org
+  - Explorer: https://sepolia.basescan.org
+  - Faucet: https://faucet.quicknode.com/base/sepolia
+  - Contract: `0x2b50C16877a3E262e0D5B9a4B9f7517634Ba27d8`
+
+**Additional Testnet Support:**
+- Polygon Amoy (80002) - Polygon testnet (additional support)
 
 ## Fee Structure
 
@@ -598,11 +619,11 @@ import '@tippingchain/ui-react/dist/styles.css';
 
 ## Architecture Benefits
 
-### Dependency Alignment (v2.5)
+### Dependency Alignment (v2.6)
 The page-level components enable a clean architecture where consuming applications become heavily dependent on ui-react:
 
 **Before v2.5**: Each application implemented UI logic separately
-**After v2.5**: Applications configure page components with minimal code
+**After v2.6**: Applications configure page components with minimal code
 
 **Example Code Reduction**:
 ```typescript

@@ -200,9 +200,9 @@ export class LocalTransactionHistoryService implements TransactionHistoryStorage
 
 // Default destination chain - use environment or fallback to mainnet
 const getDestinationChainId = (): number => {
-  // In testnet environments, use Curtis (33111), otherwise mainnet ApeChain (33139)
+  // In testnet environments, use Base Sepolia (84532), otherwise mainnet ApeChain (33139)
   if (typeof window !== 'undefined' && window.location?.hostname?.includes('testnet')) {
-    return 33111; // Curtis testnet
+    return 84532; // Base Sepolia testnet
   }
   return 33139; // ApeChain mainnet
 };
