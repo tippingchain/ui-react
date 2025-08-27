@@ -365,7 +365,8 @@ export const MultiTokenTippingInterface: React.FC<MultiTokenTippingInterfaceProp
         sourceChainId: activeChain.id,
         creatorId: creatorId,
         token: selectedToken.address || 'native', // 'native' for ETH/native tokens
-        amount: amountInWei // Amount in wei for contract compatibility
+        amount: amountInWei, // Amount in wei for contract compatibility
+        userAddress: account?.address // User's wallet address for relay API
       };
       
       // Send the tip via SDK

@@ -817,7 +817,9 @@ var ApeChainTippingInterface = ({
         creatorId,
         // NEW: Use creator ID instead of addresses
         token: selectedToken === "native" ? "native" : selectedToken,
-        amount
+        amount,
+        userAddress: account?.address
+        // User's wallet address for relay API
       });
       if (result.success) {
         const successMessage = `Tip sent! Creator will receive ~${relayQuote?.estimatedUsdc} USDC on ApeChain`;
@@ -1859,8 +1861,10 @@ var MultiTokenTippingInterface = ({
         creatorId,
         token: selectedToken.address || "native",
         // 'native' for ETH/native tokens
-        amount: amountInWei
+        amount: amountInWei,
         // Amount in wei for contract compatibility
+        userAddress: account?.address
+        // User's wallet address for relay API
       };
       const result = await sdk$1.sendTip(tipParams);
       if (result.success) {

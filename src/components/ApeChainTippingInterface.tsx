@@ -107,6 +107,7 @@ export const ApeChainTippingInterface: React.FC<ApeChainTippingProps> = ({
         creatorId: creatorId, // NEW: Use creator ID instead of addresses
         token: selectedToken === 'native' ? 'native' : selectedToken,
         amount: amount,
+        userAddress: account?.address, // User's wallet address for relay API
       });
 
       if (result.success) {
